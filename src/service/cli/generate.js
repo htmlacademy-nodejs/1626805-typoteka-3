@@ -61,14 +61,18 @@ const CATEGORIES = [
   'Железо'
 ];
 
-const generateObject = () => {
+const MAX_ANNOUNCE_COUNT = 5;
+const MAX_ITEMS = 1000;
+
+// generateObject
+const generateArticle = () => {
   const randomIndexForTitle = getRandomIntInclusive(0, TITLE.length - 1);
   const datePublication = getDateBeforeByMonth();
   
   return {
     title: TITLE[randomIndexForTitle],
     createdDate: formateDate(datePublication),
-    announce: generateText(5, SENTENCES),
+    announce: generateText(MAX_ANNOUNCE_COUNT, SENTENCES),
     fullText: generateText(SENTENCES.length - 1, SENTENCES),
     сategory: generateCategory(CATEGORIES)
   }
@@ -78,24 +82,26 @@ module.exports = {
   name: '--generate',
   run(count) {
     const [value] = count;
-    const countNumber = parseInt(value);
-    const countIsNaN = Number.isNaN(countNumber);
-    const result = [];
+    const countArticles = parseInt(value);
+    const countIsNaN = Number.isNaN(countArticles);
+    let result = [];
 
-    // Если переданное значение является числом
-    if (!countIsNaN) {
-      if (countNumber > 1000) {
-        console.info('Не больше 1000 публикаций');
-        process.exit(ExitCode.error);
-      } else {
-        for (let i = 0; i < countNumber; i++) {
-          result.push(generateObject());
-        }
-      }
-    } else {
-      result.push(generateObject());
+    // Если переданное значение не является числом
+    if (countIsNaN) {
+      result.push(generateArticle());
     }
 
+    // Если переданное значение является числом и больше MAX_ITEMS
+    if (!countIsNaN && countArticles > MAX_ITEMS) {
+      console.info('Не больше 1000 публикаций');
+      process.exit(ExitCode.error);
+    }
+
+    // Если переданное значение является числом и не больше MAX_ITEMS
+    if(!countIsNaN && countArticles <= MAX_ITEMS) {
+      result = [...Array(countArticles)].map(() => generateArticle())
+    }
+    
     const content = JSON.stringify(result, '', 2);
 
     fs.writeFile('mock.json', content, (err) => {

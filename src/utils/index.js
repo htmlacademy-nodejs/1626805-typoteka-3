@@ -24,44 +24,39 @@ function getDateBeforeByMonth(monthRange = 3) {
 // return YYYY-MM-DD hh:mm:ss
 function formateDate(date) {
   const year = date.getFullYear();
-  const month = date.getMonth() < 10 ? `0${date.getMonth()}` : date.getMonth();
-  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  const hours = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-  const minutes = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-  const seconds = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds();
+  const month = `${date.getMonth()}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  const hours = `${date.getHours()}`.padStart(2, '0');
+  const minutes = `${date.getMinutes()}`.padStart(2, '0');
+  const seconds = `${date.getSeconds()}`.padStart(2, '0');
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
 
 function generateText(maxSentencesCount, items) {
   const randomCount = getRandomIntInclusive(1, maxSentencesCount);
-  const result = [];
-
-  for(let i = 0; i < randomCount; i++) {
+  
+  return [...Array(randomCount)].map(() => {
     const randomIndex = getRandomIntInclusive(0, items.length - 1);
 
-    result.push(items[randomIndex]);
-  }
-
-  return result.join();
+    return items[randomIndex];
+  }).join();
 }
 
 function generateCategory(items) {
   const randomCount = getRandomIntInclusive(1, items.length - 1);
-  const result = [];
 
   // Save the index for uniqueness
   const temp = {};
-  for(let i = 0; i < randomCount; i++) {
+
+  return [...Array(randomCount)].map(() => {
     const randomIndex = getRandomIntInclusive(1, items.length - 1);
 
     if (!temp[randomIndex]) {
-      result.push(items[randomIndex]);
       temp[randomIndex] = true;
+      return items[randomIndex];
     }
-  }
-
-  return result;
+  }).filter((item) => item);
 }
 
 module.exports = {
