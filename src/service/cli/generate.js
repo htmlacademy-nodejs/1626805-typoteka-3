@@ -8,6 +8,7 @@ const {
   generateText,
   generateCategory
  } = require(`../../utils`);
+const chalk = require('chalk');
 const { ExitCode } = require(`../../constants`);
 
 const TITLE = [
@@ -93,7 +94,7 @@ module.exports = {
 
     // Если переданное значение является числом и больше MAX_ITEMS
     if (!countIsNaN && countArticles > MAX_ITEMS) {
-      console.info('Не больше 1000 публикаций');
+      console.info(chalk.red('Не больше 1000 публикаций'));
       process.exit(ExitCode.error);
     }
 
@@ -106,10 +107,10 @@ module.exports = {
 
     fs.writeFile('mock.json', content, (err) => {
       if (err) {
-        return console.error(`Ошибка при записи файла...`);
+        return console.error(chalk.red(`Ошибка при записи файла...`));
       }
     
-      return console.info(`Файл создан.`);
+      return console.info(chalk.green(`Файл создан.`));
     });
   }
 }
