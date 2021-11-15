@@ -8,6 +8,7 @@ const {
   generateText,
   generateCategory
  } = require(`../../utils`);
+const chalk = require('chalk');
 const { ExitCode } = require(`../../constants`);
 
 const TITLE = [
@@ -78,9 +79,21 @@ const generateArticle = () => {
   }
 }
 
+const asyncWriteFile = async (path, data) => {
+  return new Promise((res, rej) => {
+    fs.writeFile(path, data, (err) => {
+      if (err) {
+        rej('Ошибка при записи файла...');
+      }
+
+      res('Файл создан.');
+    });
+  });
+}
+
 module.exports = {
   name: '--generate',
-  run(count) {
+  async run(count) {
     const [value] = count;
     const countArticles = parseInt(value);
     const countIsNaN = Number.isNaN(countArticles);
@@ -93,7 +106,7 @@ module.exports = {
 
     // Если переданное значение является числом и больше MAX_ITEMS
     if (!countIsNaN && countArticles > MAX_ITEMS) {
-      console.info('Не больше 1000 публикаций');
+      console.info(chalk.red('Не больше 1000 публикаций'));
       process.exit(ExitCode.error);
     }
 
@@ -104,12 +117,12 @@ module.exports = {
     
     const content = JSON.stringify(result, '', 2);
 
-    fs.writeFile('mock.json', content, (err) => {
-      if (err) {
-        return console.error(`Ошибка при записи файла...`);
-      }
-    
-      return console.info(`Файл создан.`);
-    });
+    try {
+      const message = await asyncWriteFile('mock.json', content);
+
+      console.log(chalk.green(message));
+    } catch(error) {
+      console.log(chalk.red(error));
+    }
   }
 }
