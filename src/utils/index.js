@@ -59,10 +59,15 @@ function generateCategory(items) {
   }).filter((item) => item);
 }
 
+function textToArrayByDivider (data, divider) {
+  return data.split(divider);
+} 
+
 module.exports = {
   getRandomIntInclusive,
   getDateBeforeByMonth,
   formateDate,
   generateText,
-  generateCategory
+  generateCategory,
+  textToArrayByDivider
 }
