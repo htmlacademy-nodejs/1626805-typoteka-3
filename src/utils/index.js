@@ -1,3 +1,5 @@
+const fs = require(`fs`);
+
 //Максимум и минимум включаются
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values_inclusive
 function getRandomIntInclusive(min, max) {
@@ -63,11 +65,37 @@ function textToArrayByDivider (data, divider) {
   return data.split(divider);
 } 
 
+function asyncWriteFile (path, data) {
+  return new Promise((res, rej) => {
+    fs.writeFile(path, data, (err) => {
+      if (err) {
+        rej('Ошибка при записи файла...');
+      }
+
+      res('Файл создан.');
+    });
+  });
+}
+
+function asyncReadFile (path) {
+  return new Promise((res, rej) => {
+    fs.readFile(path, 'utf8', (err, data) => {
+      if(err) {
+        rej('Ошибка чтения файла...');
+      }
+
+      res(data);
+    })
+  });
+}
+
 module.exports = {
   getRandomIntInclusive,
   getDateBeforeByMonth,
   formateDate,
   generateText,
   generateCategory,
-  textToArrayByDivider
+  textToArrayByDivider,
+  asyncWriteFile,
+  asyncReadFile
 }

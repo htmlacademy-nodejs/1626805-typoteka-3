@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require(`fs`);
 const path = require('path');
 const { 
   getRandomIntInclusive,
@@ -8,7 +7,9 @@ const {
   formateDate,
   generateText,
   generateCategory,
-  textToArrayByDivider
+  textToArrayByDivider,
+  asyncWriteFile,
+  asyncReadFile
  } = require(`../../utils`);
 const chalk = require('chalk');
 const { ExitCode } = require(`../../constants`);
@@ -26,7 +27,6 @@ const generateArticle = async () => {
   const sentencesList = textToArrayByDivider(sentencesContent, '\n');
   const categoriesList = textToArrayByDivider(categoriesContent, '\n');
 
-
   const randomIndexForTitle = getRandomIntInclusive(0, titlesList.length - 1);
   const datePublication = getDateBeforeByMonth();
   
@@ -37,30 +37,6 @@ const generateArticle = async () => {
     fullText: generateText(sentencesList.length - 1, sentencesList),
     сategory: generateCategory(categoriesList)
   }
-}
-
-const asyncWriteFile = async (path, data) => {
-  return new Promise((res, rej) => {
-    fs.writeFile(path, data, (err) => {
-      if (err) {
-        rej('Ошибка при записи файла...');
-      }
-
-      res('Файл создан.');
-    });
-  });
-}
-
-const asyncReadFile = async (path) => {
-  return new Promise((res, rej) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-      if(err) {
-        rej('Ошибка чтения файла...');
-      }
-
-      res(data);
-    })
-  });
 }
 
 const getPathToData = (fileName) => {
@@ -90,8 +66,6 @@ module.exports = {
     // Если переданное значение является числом и не больше MAX_ITEMS
     if(!countIsNaN && countArticles <= MAX_ITEMS) {
       result = await Promise.all([...Array(countArticles)].map(async () => await generateArticle()));
-
-      console.log('result - ', result);
     }
     
     const content = JSON.stringify(result, '', 2);
