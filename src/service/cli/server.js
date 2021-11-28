@@ -1,62 +1,23 @@
 'use strict';
 
-const fs = require(`fs`);
-const path = require(`path`);
-const http = require(`http`);
+
+const express = require(`express`);
 const chalk = require(`chalk`);
+const articleRoutes = require(`../../express/routes/post-routes`);
 
-const {DEFAULT_PORT, HTTP_STATUS_CODE} = require(`../../constants`);
+const app = express();
 
-const getList = (res) => {
-  const pathToFile = path.join(__dirname, `../../..`, `mock.json`);
-
-  fs.readFile(pathToFile, `utf8`, (err, data) => {
-    if (err) {
-      res.writeHead(HTTP_STATUS_CODE.NOT_FOUND);
-      res.end(`Not found`);
-    }
-
-    const articles = JSON.parse(data);
-    const listTitles = articles.reduce((acc, article) => {
-      const {title} = article;
-      const li = `<li>${title}</li>`;
-
-      acc += li;
-
-      return acc;
-    }, ``);
-
-    res.setHeader(`Content-Type`, `text/html; charset=utf-8`);
-    res.writeHead(HTTP_STATUS_CODE.SUCCESS);
-
-    res.end(`<ul>${listTitles}</ul>`);
-  });
-};
-
-const onClientConnect = (req, res) => {
-  switch (req.url) {
-    case `/`:
-      getList(res);
-      break;
-    default:
-      res.writeHead(HTTP_STATUS_CODE.NOT_FOUND);
-      res.end(`Not found`);
-  }
-};
-
-const httpServer = http.createServer(onClientConnect);
+const {DEFAULT_PORT} = require(`../../constants`);
 
 module.exports = {
   name: `--server`,
   run(args) {
     const [port] = args;
 
-    httpServer.listen(port || DEFAULT_PORT, () => {
-      console.log(chalk.green(`Сервер запущен на порту ${port || DEFAULT_PORT}`));
-    });
+    app.use(`/posts`, articleRoutes);
 
-    httpServer.on(`error`, (message) => {
-      console.error(chalk.red(message));
+    app.listen(DEFAULT_PORT, () => {
+      console.log(chalk.green(`Сервер запущен на порту ${port || DEFAULT_PORT}`));
     });
   }
 };
