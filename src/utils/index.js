@@ -47,7 +47,7 @@ function generateText(maxSentencesCount, items) {
   }).join();
 }
 
-function generateCategory(items) {
+function generateRandomItems(items) {
   const randomCount = getRandomIntInclusive(1, items.length - 1);
 
   // Save the index for uniqueness
@@ -98,7 +98,7 @@ module.exports = {
   getDateBeforeByMonth,
   formateDate,
   generateText,
-  generateCategory,
+  generateRandomItems,
   textToArrayByDivider,
   asyncWriteFile,
   asyncReadFile
