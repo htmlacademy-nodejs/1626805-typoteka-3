@@ -3,9 +3,9 @@
 const {Router} = require(`express`);
 const {HTTP_STATUS_CODE} = require(`../../constants`);
 
-const searchRouter = new Router();
-
 const initSearchApi = (app, service) => {
+  const searchRouter = new Router();
+
   app.use(`/search`, searchRouter);
 
   // GET /api/search?query= — возвращает результаты поиска.

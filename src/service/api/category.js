@@ -2,9 +2,9 @@
 const {Router} = require(`express`);
 const {HTTP_STATUS_CODE} = require(`../../constants`);
 
-const categoryRoute = new Router();
-
 const initCategoryApi = (app, service) => {
+  const categoryRoute = new Router();
+
   app.use(`/categories`, categoryRoute);
 
   // GET /api/categories — возвращает список категорий;

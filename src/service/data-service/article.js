@@ -3,14 +3,11 @@ const {nanoid} = require(`nanoid`);
 const {MAX_ID_LENGTH} = require(`../../constants`);
 const {formateDate} = require(`../../utils`);
 
-// TODO описать то что возвращают методы
 const articleService = (data) => {
-  console.log(`dataServiceArticle`);
   let articles = data;
 
   return {
     findAll() {
-      console.log(` - findAll`);
       return articles;
     },
 

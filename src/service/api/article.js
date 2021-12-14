@@ -2,16 +2,15 @@
 
 const {Router} = require(`express`);
 const {HTTP_STATUS_CODE} = require(`../../constants`);
-const {articleValidator} = require(`../middlewares`);
-
-const articleRouter = new Router();
+const {articleValidator, commentValidator} = require(`../middlewares`);
 
 const initArticlesApi = (app, service) => {
+  const articleRouter = new Router();
+
   app.use(`/articles`, articleRouter);
 
   // GET /api/articles — ресурс возвращает список публикаций;
   articleRouter.get(`/`, (_, res) => {
-    console.log(`/`);
     const articles = service.findAll();
 
     res.status(HTTP_STATUS_CODE.OK).json(articles);
@@ -90,7 +89,7 @@ const initArticlesApi = (app, service) => {
   });
 
   // POST /api/articles/:articleId/comments — создаёт новый комментарий;
-  articleRouter.post(`/:articleId/comments`, (req, res) => {
+  articleRouter.post(`/:articleId/comments`, commentValidator, (req, res) => {
     const {articleId} = req.params;
     const payload = req.body;
 

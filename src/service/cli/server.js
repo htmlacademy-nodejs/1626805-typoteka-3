@@ -3,7 +3,7 @@
 const express = require(`express`);
 const chalk = require(`chalk`);
 const {DEFAULT_PORT, API_PREFIX} = require(`../../constants`);
-const initApi = require(`../api`);
+const initApi = require(`../api/api`);
 
 const app = express();
 

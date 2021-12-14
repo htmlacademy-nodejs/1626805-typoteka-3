@@ -1,21 +1,21 @@
 'use strict';
 
-exports.DEFAULT_PORT = 3000;
+const DEFAULT_PORT = 3000;
 
-exports.API_PREFIX = `/api`;
+const API_PREFIX = `/api`;
 
-exports.USER_ARGV_INDEX = 2;
+const USER_ARGV_INDEX = 2;
 
-exports.DEFAULT_COMMAND = `--version`;
+const DEFAULT_COMMAND = `--version`;
 
-exports.MAX_ID_LENGTH = 5;
+const MAX_ID_LENGTH = 5;
 
-exports.ExitCode = {
+const EXIT_CODE = {
   success: 0,
   error: 1
 };
 
-exports.HTTP_STATUS_CODE = {
+const HTTP_STATUS_CODE = {
   OK: 200,
   CREATED: 201,
   NO_CCONTENT: 204,
@@ -23,4 +23,24 @@ exports.HTTP_STATUS_CODE = {
   UNAUTHORIZED: 401,
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500
+};
+
+const VALIDATION = {
+  MIN_TITLE_LENGTH: 30,
+  MAX_TITLE_LENGTH: 250,
+  MIN_ANNOUNCE_LENGTH: 30,
+  MAX_ANNOUNCE_LENGTH: 250,
+  MAX_FILL_TEXT_LENGTH: 1000,
+  MIN_COMMENT_LENGTH: 20
+};
+
+module.exports = {
+  DEFAULT_PORT,
+  API_PREFIX,
+  USER_ARGV_INDEX,
+  DEFAULT_COMMAND,
+  MAX_ID_LENGTH,
+  HTTP_STATUS_CODE,
+  EXIT_CODE,
+  VALIDATION
 };
