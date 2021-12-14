@@ -13,7 +13,9 @@ module.exports = {
         --version: выводит номер версии
         --help: печатает этот текст
         --generate <count> формирует файл mocks.json
+        --server запускает API сервер
     `;
-    console.info(chalk.grey(message));
+    // white потому что у меня тема в терминале темная ;)
+    console.info(chalk.white(message));
   }
 };

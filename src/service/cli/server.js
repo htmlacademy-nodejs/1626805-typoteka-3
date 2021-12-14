@@ -1,23 +1,26 @@
 'use strict';
 
-
 const express = require(`express`);
 const chalk = require(`chalk`);
-const articleRoutes = require(`../../express/routes/post-routes`);
+const {DEFAULT_PORT, API_PREFIX} = require(`../../constants`);
+const initApi = require(`../api`);
 
 const app = express();
 
-const {DEFAULT_PORT} = require(`../../constants`);
+app.use(express.json());
+app.use(API_PREFIX, initApi);
 
 module.exports = {
   name: `--server`,
   run(args) {
     const [port] = args;
 
-    app.use(`/posts`, articleRoutes);
-
-    app.listen(DEFAULT_PORT, () => {
+    const server = app.listen(DEFAULT_PORT, () => {
       console.log(chalk.green(`Сервер запущен на порту ${port || DEFAULT_PORT}`));
+    });
+
+    server.once(`error`, (err) => {
+      console.error(`Ошибка при создании сервера`, err);
     });
   }
 };
