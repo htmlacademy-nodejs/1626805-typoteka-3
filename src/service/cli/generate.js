@@ -1,41 +1,55 @@
 'use strict';
 
 const path = require(`path`);
+const {nanoid} = require(`nanoid`);
 const {
   getRandomIntInclusive,
   getDateBeforeByMonth,
   formateDate,
   generateText,
-  generateCategory,
+  generateRandomItems,
   textToArrayByDivider,
   asyncWriteFile,
   asyncReadFile
 } = require(`../../utils`);
 const chalk = require(`chalk`);
-const {ExitCode} = require(`../../constants`);
+const {ExitCode, MAX_ID_LENGTH} = require(`../../constants`);
 
 const MAX_ANNOUNCE_COUNT = 5;
 const MAX_ITEMS = 1000;
+
+// return [ { id: nanoId, text: string } ]
+const generateComments = (comments) => {
+  return comments.reduce((acc, cur) => {
+    return [...acc, {id: nanoid(MAX_ID_LENGTH), text: cur}];
+  }, []);
+};
 
 // generateObject
 const generateArticle = async () => {
   const titlesContent = await asyncReadFile(getPathToData(`titles.txt`));
   const sentencesContent = await asyncReadFile(getPathToData(`sentences.txt`));
   const categoriesContent = await asyncReadFile(getPathToData(`categories.txt`));
+  const commentsContent = await asyncReadFile(getPathToData(`comments.txt`));
 
   const titlesList = textToArrayByDivider(titlesContent, `\n`);
   const sentencesList = textToArrayByDivider(sentencesContent, `\n`);
   const categoriesList = textToArrayByDivider(categoriesContent, `\n`);
+  const commentsList = textToArrayByDivider(commentsContent, `\n`);
 
   const randomIndexForTitle = getRandomIntInclusive(0, titlesList.length - 1);
   const datePublication = getDateBeforeByMonth();
+  const comments = generateRandomItems(commentsList);
+  const categorys = generateRandomItems(categoriesList);
 
   return {
+    id: nanoid(5),
     title: titlesList[randomIndexForTitle],
     createdDate: formateDate(datePublication),
     announce: generateText(MAX_ANNOUNCE_COUNT, sentencesList),
     fullText: generateText(sentencesList.length - 1, sentencesList),
-    сategory: generateCategory(categoriesList)
+    category: categorys,
+    comments: generateComments(comments)
   };
 };
 
