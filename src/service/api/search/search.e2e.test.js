@@ -170,11 +170,9 @@ const app = express();
 app.use(express.json());
 search(app, dataService(mockData));
 
-// eslint-disable-next-line no-undef
 describe(`API returns articles based on search query`, () => {
   let response;
 
-  // eslint-disable-next-line no-undef
   beforeAll(async () => {
     response = await request(app)
       .get(`/search`)
@@ -183,24 +181,19 @@ describe(`API returns articles based on search query`, () => {
       });
   });
 
-  // eslint-disable-next-line no-undef
   test(`Status code 200`, () => {
-    // eslint-disable-next-line no-undef
     expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
   });
-  // eslint-disable-next-line no-undef
-  test(`1 offer found`, () => {
-    // eslint-disable-next-line no-undef
+
+  test(`1 article found`, () => {
     expect(response.body.length).toBe(1);
   });
-  // eslint-disable-next-line no-undef
-  test(`Offer has correct id`, () => {
-    // eslint-disable-next-line no-undef
+
+  test(`Article has correct id`, () => {
     expect(response.body[0].id).toBe(`07wH2`);
   });
 });
 
-// eslint-disable-next-line no-undef
 test(`API returns code 404 if nothing is found`, async () => {
   await request(app)
     .get(`/search`)
@@ -208,7 +201,6 @@ test(`API returns code 404 if nothing is found`, async () => {
     .expect(HTTP_STATUS_CODE.NOT_FOUND);
 });
 
-// eslint-disable-next-line no-undef
 test(`API returns 400 when query string is absent`, async () => {
   await request(app)
     .get(`/search`)

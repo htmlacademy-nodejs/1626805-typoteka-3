@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require(`express`);
-const {DEFAULT_PORT, API_PREFIX, HTTP_STATUS_CODE} = require(`../../constants`);
+const {DEFAULT_PORT, API_PREFIX, HTTP_STATUS_CODE, EXIT_CODE} = require(`../../constants`);
 const initApi = require(`../api/api`);
 const {getLogger} = require(`../lib/logger`);
 
@@ -45,7 +45,7 @@ module.exports = {
 
     } catch (err) {
       logger.error(`An error occurred: ${err.message}`);
-      process.exit(1);
+      process.exit(EXIT_CODE.error);
     }
   }
 };

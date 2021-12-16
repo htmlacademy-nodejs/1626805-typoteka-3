@@ -170,27 +170,24 @@ app.use(express.json());
 
 category(app, dataService(mockData));
 
-// eslint-disable-next-line no-undef
 describe(`API returns category list`, () => {
   let response;
 
-  // eslint-disable-next-line no-undef
   beforeAll(async () => {
     response = await request(app)
       .get(`/categories`);
   });
 
-  // eslint-disable-next-line no-undef
+
   test(`Status code 200`, () => {
-    // eslint-disable-next-line no-undef
     expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
   });
-  // eslint-disable-next-line no-undef
-  test(`Returns list of 3 categories`, () => expect(response.body.length).toBe(4));
 
-  // eslint-disable-next-line no-undef
+  test(`Returns list of 4 categories`, () => {
+    expect(response.body.length).toBe(4)
+  });
+
   test(`Category names are "Кино", "Разное", "Без рамки", "Программирование"`, () => {
-    // eslint-disable-next-line no-undef
     expect(response.body).toEqual(expect.arrayContaining([`Кино`, `Разное`, `Без рамки`, `Программирование`]));
   });
 });
