@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     res.status(HTTP_STATUS_CODE.BAD_REQUEST).send(`Bad request`);
   }
 
-  if (!category.length) {
+  if (!category || !category.length) {
     res.status(HTTP_STATUS_CODE.BAD_REQUEST).send(`Bad request`);
   }
 

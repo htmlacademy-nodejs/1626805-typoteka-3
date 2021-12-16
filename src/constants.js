@@ -34,6 +34,11 @@ const VALIDATION = {
   MIN_COMMENT_LENGTH: 20
 };
 
+const Env = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
 module.exports = {
   DEFAULT_PORT,
   API_PREFIX,
@@ -42,5 +47,6 @@ module.exports = {
   MAX_ID_LENGTH,
   HTTP_STATUS_CODE,
   EXIT_CODE,
-  VALIDATION
+  VALIDATION,
+  Env
 };
