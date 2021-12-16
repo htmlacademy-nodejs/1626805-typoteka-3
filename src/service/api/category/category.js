@@ -1,6 +1,6 @@
 'use strict';
 const {Router} = require(`express`);
-const {HTTP_STATUS_CODE} = require(`../../constants`);
+const {HTTP_STATUS_CODE} = require(`../../../constants`);
 
 const initCategoryApi = (app, service) => {
   const categoryRoute = new Router();

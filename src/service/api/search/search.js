@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HTTP_STATUS_CODE} = require(`../../constants`);
+const {HTTP_STATUS_CODE} = require(`../../../constants`);
 
 const initSearchApi = (app, service) => {
   const searchRouter = new Router();
@@ -13,9 +13,18 @@ const initSearchApi = (app, service) => {
   // Публикация соответствует поиску в случае наличия хотя бы одного вхождения искомой фразы.
   searchRouter.get(`/`, (req, res) => {
     const {query} = req.query;
+
+    if (query === undefined) {
+      res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(`Bag request`);
+    }
+
     const articles = service.search(query);
 
-    res.status(HTTP_STATUS_CODE.OK).json(articles);
+    if (articles.length) {
+      res.status(HTTP_STATUS_CODE.OK).json(articles);
+    } else {
+      res.status(HTTP_STATUS_CODE.NOT_FOUND).json(`Not found`);
+    }
   });
 };
 

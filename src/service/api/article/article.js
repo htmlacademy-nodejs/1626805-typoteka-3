@@ -1,8 +1,8 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HTTP_STATUS_CODE} = require(`../../constants`);
-const {articleValidator, commentValidator} = require(`../middlewares`);
+const {HTTP_STATUS_CODE} = require(`../../../constants`);
+const {articleValidator, commentValidator} = require(`../../middlewares`);
 
 const initArticlesApi = (app, service) => {
   const articleRouter = new Router();
@@ -32,7 +32,7 @@ const initArticlesApi = (app, service) => {
   articleRouter.post(`/`, articleValidator, (req, res) => {
     const newArticle = service.create(req.body);
 
-    res.status(HTTP_STATUS_CODE.OK).json(newArticle);
+    res.status(HTTP_STATUS_CODE.CREATED).json(newArticle);
   });
 
   // PUT /api/articles/:articleId — редактирует определённую публикацию;
@@ -82,7 +82,7 @@ const initArticlesApi = (app, service) => {
     const deletedComments = service.dropComments(articleId, commentId);
 
     if (!deletedComments) {
-      res.status(HTTP_STATUS_CODE.NOT_FOUND).send(`Not found with ${articleId}`);
+      res.status(HTTP_STATUS_CODE.NOT_FOUND).send(`Not found`);
     }
 
     res.status(HTTP_STATUS_CODE.OK).json(deletedComments);
@@ -99,7 +99,7 @@ const initArticlesApi = (app, service) => {
       res.status(HTTP_STATUS_CODE.NOT_FOUND).send(`Not found with ${articleId}`);
     }
 
-    res.status(HTTP_STATUS_CODE.OK).json(newComment);
+    res.status(HTTP_STATUS_CODE.CREATED).json(newComment);
   });
 };
 

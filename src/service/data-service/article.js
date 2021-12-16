@@ -51,7 +51,7 @@ const articleService = (data) => {
 
       articles = articles.filter((article) => article.id !== id);
 
-      return articles;
+      return targetAtricle;
     },
 
     findComments(id) {
@@ -68,6 +68,14 @@ const articleService = (data) => {
       const targetAtricle = articles.find((article) => article.id === articleId);
 
       if (!targetAtricle) {
+        return null;
+      }
+
+      const targetComment = targetAtricle.comments.find((comment) => {
+        return comment.id === commentId;
+      });
+
+      if (!targetComment) {
         return null;
       }
 
