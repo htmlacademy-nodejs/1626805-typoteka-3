@@ -4,7 +4,6 @@ const {Router} = require(`express`);
 const myRoute = new Router();
 const api = require(`../../api`).getAPI();
 
-// DONE
 myRoute.get(`/`, async (_, res) => {
   const articles = await api.getArticles();
 
@@ -13,7 +12,6 @@ myRoute.get(`/`, async (_, res) => {
   });
 });
 
-// DONE
 myRoute.get(`/comments`, async (_, res) => {
   const articles = await api.getArticles();
 

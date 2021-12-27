@@ -11,7 +11,7 @@ class API {
     this._http = axios.create({
       baseURL,
       timeout
-    })
+    });
   }
 
   async _load(url, options) {
@@ -20,7 +20,7 @@ class API {
   }
 
   getArticles() {
-    return this._load('/articles');
+    return this._load(`/articles`);
   }
 
   getArticle(id) {
@@ -32,7 +32,7 @@ class API {
   }
 
   async getCategories() {
-    return this._load('/categories');
+    return this._load(`/categories`);
   }
 
   async createArticle(data) {

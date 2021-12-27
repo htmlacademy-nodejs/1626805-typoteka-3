@@ -8,6 +8,7 @@ const articleRoutes = require(`./routes/articles/articles.router`);
 
 const DEFAULT_PORT = 8080;
 const PUBLIC_DIR = `public`;
+const UPLOAD_DIR = `upload`;
 
 const {HTTP_STATUS_CODE} = require(`../constants`);
 
@@ -18,6 +19,7 @@ app.use(`/my`, myRoutes);
 app.use(`/articles`, articleRoutes);
 
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));
 
 app.use((_, res) =>
   res.status(HTTP_STATUS_CODE.BAD_REQUEST).render(`pages/errors/404`)
