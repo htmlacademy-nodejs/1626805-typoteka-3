@@ -2,9 +2,18 @@
 
 const {Router} = require(`express`);
 const mainRouter = new Router();
+const api = require(`../../api`).getAPI();
 
-mainRouter.get(`/`, (req, res) => {
-  const content = {
+// DONE
+mainRouter.get(`/`, async (_, res) => {
+  const [articles, catagories] = await Promise.all([
+    api.getArticles(),
+    api.getCategories(),
+  ]);
+
+  res.render(`pages/main`, {
+    previews: articles,
+    themes: catagories,
     title: `Типотека`,
     hiddenTitle: ` Главная страница личного блога Типотека`,
     description: `Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏`,
@@ -12,37 +21,45 @@ mainRouter.get(`/`, (req, res) => {
     hasContent: true,
     hasHot: true,
     hasLastComments: true,
-  };
-
-  res.render(`pages/main`, content);
+  });
 });
 
-mainRouter.get(`/register`, (req, res) => {
-  const content = {
+// DONE
+mainRouter.get(`/register`, (_, res) => {
+  return res.render(`pages/register`, {
     title: `Типотека`,
     error: {
       email: false,
       password: false,
     },
-  };
-
-  res.render(`pages/register`, content);
+  });
 });
 
-mainRouter.get(`/login`, (req, res) => {
-  const content = {
+// DONE
+mainRouter.get(`/login`, (_, res) => {
+  return res.render(`pages/login`, {
     title: `Типотека`,
     error: {
       email: false,
       password: false,
     },
-  };
-
-  res.render(`pages/login`, content);
+  });
 });
 
-mainRouter.get(`/search`, (req, res) => {
-  const content = {
+// DONE
+mainRouter.get(`/search`, async (req, res) => {
+  const {search} = req.query;
+  let results = [];
+
+  try {
+    results = await api.search(search);
+  } catch (e) {
+    results = [];
+  }
+
+  return res.render(`pages/search`, {
+    results,
+    searchValue: search,
     title: `Типотека`,
     hiddenTitle: ` Страница поиска личного блога Типотека`,
     account: {
@@ -50,38 +67,7 @@ mainRouter.get(`/search`, (req, res) => {
       name: `Алёна Фролова`,
       avatar: `img/avatar-2.png`,
     },
-    isResult: false,
-    searchResult: {
-      type: `list`,
-      list: [
-        {
-          date: {
-            stamp: `2019-03-21T20:33`,
-            day: `21.03.2019`,
-            time: `20:33`,
-          },
-          link: {
-            text: `Huawei открыла в России путешествия на смартфон Mate 30 Pro без сервисов Google`,
-            href: `#`,
-          },
-        },
-        {
-          date: {
-            stamp: `2019-03-21T20:33`,
-            day: `21.03.2019`,
-            time: `20:33`,
-          },
-          link: {
-            text: `«Яндекс.Метрика» запустила путешествия сервис для оценки эффективности баннеров и видеорекламы в реальном времени`,
-            href: `#`,
-          },
-        },
-      ],
-    },
-    scriptList: [`js/main.js`],
-  };
-
-  res.render(`pages/search`, content);
+  });
 });
 
 module.exports = mainRouter;
