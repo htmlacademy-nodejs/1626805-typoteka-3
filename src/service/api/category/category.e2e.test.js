@@ -184,7 +184,7 @@ describe(`API returns category list`, () => {
   });
 
   test(`Returns list of 4 categories`, () => {
-    expect(response.body.length).toBe(4)
+    expect(response.body.length).toBe(4);
   });
 
   test(`Category names are "Кино", "Разное", "Без рамки", "Программирование"`, () => {
