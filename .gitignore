@@ -18,3 +18,5 @@ mock.json
 todo.md
 requests.http
 upload
+
+.env
