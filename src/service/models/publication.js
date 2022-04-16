@@ -6,18 +6,18 @@ class Publication extends Model {}
 
 const define = (sequelize) => Publication.init({
   title: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   announcement: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   text: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
-  picture: {name: DataTypes.STRING}
+  picture: {type: DataTypes.STRING}
 }, {
   sequelize,
   modelName: `Publication`,

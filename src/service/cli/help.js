@@ -14,6 +14,7 @@ module.exports = {
         --help: печатает этот текст
         --generate <count> формирует файл mocks.json
         --server запускает API сервер
+        --filldb заполняет базу данных тестовыми данными
     `;
     // white потому что у меня тема в терминале темная ;)
     console.info(chalk.white(message));

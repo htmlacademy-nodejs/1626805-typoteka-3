@@ -6,22 +6,22 @@ class User extends Model {}
 
 const define = (sequelize) => User.init({
   firstName: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   lastName: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   email: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   avatar: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
   },
   passwordHash: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   }
 }, {

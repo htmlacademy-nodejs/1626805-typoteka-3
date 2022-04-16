@@ -6,7 +6,7 @@ class Comment extends Model {}
 
 const define = (sequelize) => Comment.init({
   text: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   }
 }, {

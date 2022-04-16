@@ -6,7 +6,7 @@ class Category extends Model {}
 
 const define = (sequelize) => Category.init({
   name: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   }
 }, {

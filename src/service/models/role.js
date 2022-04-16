@@ -6,7 +6,7 @@ class Role extends Model {}
 
 const define = (sequelize) => Role.init({
   name: {
-    name: DataTypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   }
 }, {
