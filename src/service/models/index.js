@@ -27,7 +27,7 @@ const define = (sequelize) => {
   User.hasOne(Role, {as: Aliase.ROLES, foreignKey: `userId`});
 
   // // У публикации может быть несколько комментариев
-  Publication.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `commentId`});
+  Publication.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `publicationId`});
   // // Но у публикации только один владелец - user
   Publication.belongsTo(User, {foreignKey: `userId`});
 

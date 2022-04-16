@@ -93,6 +93,20 @@ function asyncReadFile(path) {
   });
 }
 
+function getRandomSubarray(items) {
+  items = items.slice();
+  let count = getRandomIntInclusive(1, items.length - 1);
+  const result = [];
+  while (count--) {
+    result.push(
+        ...items.splice(
+            getRandomIntInclusive(0, items.length - 1), 1
+        )
+    );
+  }
+  return result;
+}
+
 module.exports = {
   getRandomIntInclusive,
   getDateBeforeByMonth,
@@ -101,5 +115,6 @@ module.exports = {
   generateRandomItems,
   textToArrayByDivider,
   asyncWriteFile,
-  asyncReadFile
+  asyncReadFile,
+  getRandomSubarray
 };

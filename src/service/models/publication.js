@@ -10,11 +10,11 @@ const define = (sequelize) => Publication.init({
     allowNull: false
   },
   announcement: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   text: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   picture: {type: DataTypes.STRING}
