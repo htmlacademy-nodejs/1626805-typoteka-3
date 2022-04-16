@@ -54,12 +54,6 @@ module.exports = {
 
     await sequelize.sync({force: true});
 
-    // Таблицы созданы
-    // TODO
-    // + создать генератор
-    // + заполнить каждую таблицу данными
-    // - переписать сервис для работы с данными, сделать так чтобы можно было работать с данными из БД
-
     const titlesContent = await asyncReadFile(getPathToData(`titles.txt`));
     const sentencesContent = await asyncReadFile(getPathToData(`sentences.txt`));
     const categoriesContent = await asyncReadFile(getPathToData(`categories.txt`));

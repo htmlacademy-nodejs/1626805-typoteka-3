@@ -9,9 +9,9 @@ block content
     section.main-page__notes.notes
       h1.notes__title Мои записи
       ul.notes__list
-        each article in articles
+        each publication in publications
           li.notes__list-item
-            +time(article.createdDate)
-            a.notes__item-text(href=`/articles/edit/${article.id}`)= article.title
+            +time(publication.createdDate)
+            a.notes__item-text(href=`/publications/edit/${publication.id}`)= publication.title
             button.notes__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка

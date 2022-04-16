@@ -11,17 +11,17 @@ const initSearchApi = (app, service) => {
   // GET /api/search?query= — возвращает результаты поиска.
   // Поиск публикаций выполняется по заголовку.
   // Публикация соответствует поиску в случае наличия хотя бы одного вхождения искомой фразы.
-  searchRouter.get(`/`, (req, res) => {
+  searchRouter.get(`/`, async (req, res) => {
     const {query} = req.query;
 
     if (query === undefined) {
       res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(`Bag request`);
     }
 
-    const articles = service.search(query);
+    const publications = await service.findAll(query);
 
-    if (articles.length) {
-      res.status(HTTP_STATUS_CODE.OK).json(articles);
+    if (publications.length) {
+      res.status(HTTP_STATUS_CODE.OK).json(publications);
     } else {
       res.status(HTTP_STATUS_CODE.NOT_FOUND).json(`Not found`);
     }

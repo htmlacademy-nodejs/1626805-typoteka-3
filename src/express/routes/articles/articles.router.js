@@ -3,38 +3,38 @@
 const {Router} = require(`express`);
 const multer = require(`multer`);
 
-const articleRouter = new Router();
+const publicationRouter = new Router();
 const api = require(`../../api`).getAPI();
 const storage = require(`../../disk-storage`);
 
 const upload = multer({storage});
 
-articleRouter.get(`/add`, async (_, res) => {
+publicationRouter.get(`/add`, async (_, res) => {
   const categories = await api.getCategories();
 
-  return res.render(`pages/articles/edit`, {
+  return res.render(`pages/publications/edit`, {
     categories,
-    article: {},
+    publication: {},
     account: {
       type: `admin`,
     },
   });
 });
 
-articleRouter.get(`/:id`, async (req, res) => {
+publicationRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const [article, categories] = await Promise.all([
-    api.getArticle(id),
+  const [publication, categories] = await Promise.all([
+    api.getPublication(id),
     api.getCategories(),
   ]);
 
-  return res.render(`pages/articles/article`, {
-    article: {
+  return res.render(`pages/publications/publication`, {
+    publication: {
       image: {
         fileName: `sea-fullsize@1x.jpg`,
         alt: `пейзаж море, скалы, пляж`,
       },
-      ...article
+      ...publication
     },
     themes: categories,
     account: {
@@ -45,15 +45,15 @@ articleRouter.get(`/:id`, async (req, res) => {
   });
 });
 
-articleRouter.get(`/edit/:id`, async (req, res) => {
+publicationRouter.get(`/edit/:id`, async (req, res) => {
   const {id} = req.params;
-  const [article, categories] = await Promise.all([
-    api.getArticle(id),
+  const [publication, categories] = await Promise.all([
+    api.getPublication(id),
     api.getCategories(),
   ]);
 
-  return res.render(`pages/articles/edit`, {
-    article,
+  return res.render(`pages/publications/edit`, {
+    publication,
     categories,
     account: {
       type: `admin`,
@@ -61,11 +61,11 @@ articleRouter.get(`/edit/:id`, async (req, res) => {
   });
 });
 
-articleRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
+publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   const {body, file} = req;
   const {createdDate, title, announce, fullText, category} = body;
 
-  const newArticle = {
+  const newPublication = {
     picture: file ? file.filename : ``,
     createdDate,
     title,
@@ -76,15 +76,15 @@ articleRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   };
 
   try {
-    await api.createArticle(newArticle);
+    await api.createPublication(newPublication);
     res.redirect(`/my`);
   } catch (e) {
     res.redirect(`back`);
   }
 });
 
-articleRouter.get(`/category/:id`, (_, res) => {
-  return res.render(`pages/articles/categories`, {
+publicationRouter.get(`/category/:id`, (_, res) => {
+  return res.render(`pages/publications/categories`, {
     title: `Типотека`,
     displayedTitle: `Бизнес`,
     description: `Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏`,
@@ -99,4 +99,4 @@ articleRouter.get(`/category/:id`, (_, res) => {
   });
 });
 
-module.exports = articleRouter;
+module.exports = publicationRouter;

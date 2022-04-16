@@ -3,8 +3,8 @@
 const express = require(`express`);
 const request = require(`supertest`);
 
-const article = require(`./article`).initArticlesApi;
-const dataService = require(`../../data-service`).articleService;
+const publication = require(`./publication`).initPublicationsApi;
+const dataService = require(`../../data-service`).publicationService;
 
 const {HTTP_STATUS_CODE} = require(`../../../constants`);
 
@@ -173,19 +173,19 @@ const createAPI = () => {
 
   app.use(express.json());
 
-  article(app, dataService(cloneData));
+  publication(app, dataService(cloneData));
 
   return app;
 };
 
 
-describe(`API returns a list of all articles`, () => {
+describe(`API returns a list of all publications`, () => {
   const app = createAPI();
 
   let response;
 
   beforeAll(async () => {
-    response = await request(app).get(`/articles`);
+    response = await request(app).get(`/publications`);
   });
 
 
@@ -194,18 +194,18 @@ describe(`API returns a list of all articles`, () => {
   });
 
 
-  test(`Returns a list of 5 articles`, () => {
+  test(`Returns a list of 5 publications`, () => {
     expect(response.body.length).toBe(6);
   });
 
 
-  test(`First article's id equals "bUAlOA"`, () => {
+  test(`First publication's id equals "bUAlOA"`, () => {
     expect(response.body[0].id).toBe(`07wH2`);
   });
 });
 
-describe(`API creates an article if data is valid`, () => {
-  const newArticle = {
+describe(`API creates an publication if data is valid`, () => {
+  const newPublication = {
     title: `Новый заголовок (текст должен быть как минимум 30 символов)`,
     announce: `Новый анонс (текст должен быть как минимум 30 символов)`,
     fullText: `Новый текст`,
@@ -218,27 +218,27 @@ describe(`API creates an article if data is valid`, () => {
 
   beforeAll(async () => {
     response = await request(app)
-      .post(`/articles`)
-      .send(newArticle);
+      .post(`/publications`)
+      .send(newPublication);
   });
 
   test(`Status code 201`, () => {
     expect(response.statusCode).toBe(HTTP_STATUS_CODE.CREATED);
   });
 
-  test(`Returns article created`, () => {
-    expect(response.body).toEqual(expect.objectContaining(newArticle));
+  test(`Returns publication created`, () => {
+    expect(response.body).toEqual(expect.objectContaining(newPublication));
   });
 
-  test(`Articles count is changed`, async () => {
-    const res = await request(app).get(`/articles`);
+  test(`Publications count is changed`, async () => {
+    const res = await request(app).get(`/publications`);
 
     expect(res.body.length).toBe(7);
   });
 });
 
 describe(`API refuses to create an atricle if data is invalid`, () => {
-  const newArticle = {
+  const newPublication = {
     title: `Новый заголовок (текст должен быть как минимум 30 символов)`,
     announce: `Новый анонс (текст должен быть как минимум 30 символов)`,
     category: [`Разное`]
@@ -247,20 +247,20 @@ describe(`API refuses to create an atricle if data is invalid`, () => {
   const app = createAPI();
 
   test(`Without any required property response code is 400`, async () => {
-    for (const key of Object.keys(newArticle)) {
-      const badArticle = {...newArticle};
-      delete badArticle[key];
+    for (const key of Object.keys(newPublication)) {
+      const badPublication = {...newPublication};
+      delete badPublication[key];
 
       await request(app)
-        .post(`/articles`)
-        .send(badArticle)
+        .post(`/publications`)
+        .send(badPublication)
         .expect(HTTP_STATUS_CODE.BAD_REQUEST);
     }
   });
 });
 
-describe(`API changes existent article`, () => {
-  const newArticle = {
+describe(`API changes existent publication`, () => {
+  const newPublication = {
     id: `07wH2`,
     title: `Новый заголовок (текст должен быть как минимум 30 символов)`,
     announce: `Новый анонс (текст должен быть как минимум 30 символов)`,
@@ -275,20 +275,20 @@ describe(`API changes existent article`, () => {
 
   beforeAll(async () => {
     response = await request(app)
-      .put(`/articles/07wH2`)
-      .send(newArticle);
+      .put(`/publications/07wH2`)
+      .send(newPublication);
   });
 
   test(`Status code 200`, () => {
     expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
   });
 
-  test(`Returns changed article`, () => {
-    expect(response.body).toEqual(expect.objectContaining(newArticle));
+  test(`Returns changed publication`, () => {
+    expect(response.body).toEqual(expect.objectContaining(newPublication));
   });
 
-  test(`Article is really changed`, async () => {
-    const data = await request(app).get(`/articles/07wH2`);
+  test(`Publication is really changed`, async () => {
+    const data = await request(app).get(`/publications/07wH2`);
 
     expect(data.body.title).toBe(`Новый заголовок (текст должен быть как минимум 30 символов)`);
   });
@@ -297,7 +297,7 @@ describe(`API changes existent article`, () => {
 test(`API returns status code 404 when trying to change non-existent atricle`, () => {
   const app = createAPI();
 
-  const validArticle = {
+  const validPublication = {
     title: `Новый заголовок (текст должен быть как минимум 30 символов)`,
     announce: `Новый анонс (текст должен быть как минимум 30 символов)`,
     fullText: `Новый-новый текст`,
@@ -306,15 +306,15 @@ test(`API returns status code 404 when trying to change non-existent atricle`, (
   };
 
   return request(app)
-    .put(`/articles/NOEXST`)
-    .send(validArticle)
+    .put(`/publications/NOEXST`)
+    .send(validPublication)
     .expect(HTTP_STATUS_CODE.NOT_FOUND);
 });
 
 test(`API returns status code 400 when trying to change an atricle with invalid data`, () => {
   const app = createAPI();
 
-  const invalidArticleWithoutTitle = {
+  const invalidPublicationWithoutTitle = {
     announce: `Новый анонс (текст должен быть как минимум 30 символов)`,
     fullText: `Новый-новый текст`,
     category: [`Разное`],
@@ -322,12 +322,12 @@ test(`API returns status code 400 when trying to change an atricle with invalid 
   };
 
   return request(app)
-    .put(`/articles/ACQXq`)
-    .send(invalidArticleWithoutTitle)
+    .put(`/publications/ACQXq`)
+    .send(invalidPublicationWithoutTitle)
     .expect(HTTP_STATUS_CODE.BAD_REQUEST);
 });
 
-describe(`API correctly deletes an atricle`, () => {
+describe(`API correctly deletes an publication`, () => {
   const app = createAPI();
 
   let response;
@@ -335,7 +335,7 @@ describe(`API correctly deletes an atricle`, () => {
 
   beforeAll(async () => {
     response = await request(app)
-      .delete(`/articles/07wH2`);
+      .delete(`/publications/07wH2`);
   });
 
 
@@ -343,32 +343,32 @@ describe(`API correctly deletes an atricle`, () => {
     expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
   });
 
-  test(`Returns deleted article`, () => {
+  test(`Returns deleted publication`, () => {
     expect(response.body.id).toBe(`07wH2`);
   });
 
-  test(`Article count is 5 now`, async () => {
-    const data = await request(app).get(`/articles`);
+  test(`Publication count is 5 now`, async () => {
+    const data = await request(app).get(`/publications`);
 
     expect(data.body.length).toBe(5);
   });
 });
 
-test(`API refuses to delete non-existent article`, () => {
+test(`API refuses to delete non-existent publication`, () => {
   const app = createAPI();
 
   return request(app)
-    .delete(`/articles/NOEXST`)
+    .delete(`/publications/NOEXST`)
     .expect(HTTP_STATUS_CODE.NOT_FOUND);
 });
 
-describe(`Get comment from article`, () => {
+describe(`Get comment from publication`, () => {
   const app = createAPI();
 
   let response;
 
   beforeAll(async () => {
-    response = await request(app).get(`/articles/Ceqo_/comments`);
+    response = await request(app).get(`/publications/Ceqo_/comments`);
   });
 
   test(`Status code 200`, () => {
@@ -380,7 +380,7 @@ describe(`Get comment from article`, () => {
   });
 });
 
-describe(`Create new comment in article`, () => {
+describe(`Create new comment in publication`, () => {
   const app = createAPI();
 
   const newComment = {
@@ -391,7 +391,7 @@ describe(`Create new comment in article`, () => {
 
   beforeAll(async () => {
     response = await request(app)
-      .post(`/articles/ACQXq/comments`)
+      .post(`/publications/ACQXq/comments`)
       .send(newComment);
   });
 
@@ -404,17 +404,17 @@ describe(`Create new comment in article`, () => {
   });
 
   test(`Comment count to be 2`, async () => {
-    const data = await request(app).get(`/articles/ACQXq/comments`);
+    const data = await request(app).get(`/publications/ACQXq/comments`);
 
     expect(data.body.length).toBe(2);
   });
 });
 
-test(`API refuses to create a comment to non-existent article and returns status code 404`, () => {
+test(`API refuses to create a comment to non-existent publication and returns status code 404`, () => {
   const app = createAPI();
 
   return request(app)
-    .post(`/articles/NOEXST/comments`)
+    .post(`/publications/NOEXST/comments`)
     .send({
       comment: `Новый комментарий должен юыть минимум 20 символов`
     })
@@ -425,7 +425,7 @@ test(`API refuses to delete non-existent comment`, () => {
   const app = createAPI();
 
   return request(app)
-    .delete(`/articles/Ceqo_/comments/NOEXST`)
+    .delete(`/publications/Ceqo_/comments/NOEXST`)
     .expect(HTTP_STATUS_CODE.NOT_FOUND);
 });
 

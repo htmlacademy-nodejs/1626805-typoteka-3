@@ -19,12 +19,12 @@ class API {
     return response.data;
   }
 
-  getArticles() {
-    return this._load(`/articles`);
+  getPublications() {
+    return this._load(`/publications`);
   }
 
-  getArticle(id) {
-    return this._load(`/articles/${id}`);
+  getPublication(id) {
+    return this._load(`/publications/${id}`);
   }
 
   search(query) {
@@ -35,8 +35,8 @@ class API {
     return this._load(`/categories`);
   }
 
-  async createArticle(data) {
-    return this._load(`/articles`, {
+  async createPublication(data) {
+    return this._load(`/publications`, {
       method: `POST`,
       data
     });

@@ -4,7 +4,7 @@ const express = require(`express`);
 const path = require(`path`);
 const mainRoutes = require(`./routes/main/main.router`);
 const myRoutes = require(`./routes/my/my.router`);
-const articleRoutes = require(`./routes/articles/articles.router`);
+const publicationRoutes = require(`./routes/publications/publications.router`);
 
 const DEFAULT_PORT = 8080;
 const PUBLIC_DIR = `public`;
@@ -16,7 +16,7 @@ const app = express();
 
 app.use(`/`, mainRoutes);
 app.use(`/my`, myRoutes);
-app.use(`/articles`, articleRoutes);
+app.use(`/publications`, publicationRoutes);
 
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
 app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));

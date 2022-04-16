@@ -5,13 +5,13 @@ const mainRouter = new Router();
 const api = require(`../../api`).getAPI();
 
 mainRouter.get(`/`, async (_, res) => {
-  const [articles, catagories] = await Promise.all([
-    api.getArticles(),
+  const [publications, catagories] = await Promise.all([
+    api.getPublications(),
     api.getCategories(),
   ]);
 
   res.render(`pages/main`, {
-    previews: articles,
+    previews: publications,
     themes: catagories,
     title: `Типотека`,
     hiddenTitle: ` Главная страница личного блога Типотека`,

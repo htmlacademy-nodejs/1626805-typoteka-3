@@ -1,9 +1,9 @@
 'use strict';
 
-const articleValidator = require(`./article-validator`);
+const publicationValidator = require(`./publication-validator`);
 const commentValidator = require(`./comment-validator`);
 
 module.exports = {
-  articleValidator,
+  publicationValidator,
   commentValidator
 };

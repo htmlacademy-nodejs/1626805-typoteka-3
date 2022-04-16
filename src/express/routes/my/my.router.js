@@ -5,18 +5,18 @@ const myRoute = new Router();
 const api = require(`../../api`).getAPI();
 
 myRoute.get(`/`, async (_, res) => {
-  const articles = await api.getArticles();
+  const publications = await api.getPublications();
 
   return res.render(`pages/my/my`, {
-    articles,
+    publications,
   });
 });
 
 myRoute.get(`/comments`, async (_, res) => {
-  const articles = await api.getArticles();
+  const publications = await api.getPublications();
 
   return res.render(`pages/my/comments`, {
-    articles,
+    publications,
   });
 });
 

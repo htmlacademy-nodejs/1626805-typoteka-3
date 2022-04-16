@@ -8,8 +8,8 @@ const initCategoryApi = (app, service) => {
   app.use(`/categories`, categoryRoute);
 
   // GET /api/categories — возвращает список категорий;
-  categoryRoute.get(`/`, (_, res) => {
-    const categories = service.findAll();
+  categoryRoute.get(`/`, async (_, res) => {
+    const categories = await service.findAll();
 
     return res.status(HTTP_STATUS_CODE.OK).json([...categories]);
   });
