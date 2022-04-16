@@ -12,6 +12,8 @@ const upload = multer({storage});
 publicationRouter.get(`/add`, async (_, res) => {
   const categories = await api.getCategories();
 
+  console.log(`categories - `, categories);
+
   return res.render(`pages/publications/edit`, {
     categories,
     publication: {},
