@@ -8,9 +8,15 @@ class PublicationService {
     this._Category = sequelize.models.Category;
   }
 
-  async findAll() {
+  async findAll(needComments) {
+    const include = [Aliase.CATEGORIES];
+
+    if (needComments) {
+      include.push(Aliase.COMMENTS);
+    }
+
     const publications = await this._Publication.findAll({
-      include: [Aliase.CATEGORIES],
+      include,
       order: [
         [`createdAt`, `DESC`]
       ]

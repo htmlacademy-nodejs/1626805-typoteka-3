@@ -19,8 +19,8 @@ class API {
     return response.data;
   }
 
-  getPublications() {
-    return this._load(`/publications`);
+  getPublications({comments}) {
+    return this._load(`/publications`, {params: {comments}});
   }
 
   getPublication(id) {
@@ -29,6 +29,10 @@ class API {
 
   search(query) {
     return this._load(`/search`, {params: {query}});
+  }
+
+  getComments(id) {
+    return this._load(`/comments/${id}`);
   }
 
   async getCategories() {

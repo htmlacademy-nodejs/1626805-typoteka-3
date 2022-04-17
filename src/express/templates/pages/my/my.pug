@@ -1,9 +1,5 @@
 extends ../layout
 
-mixin time(data)
-  - var dataArray = data.split(' ');
-  time.notes__item-time(datetime=data)= `${dataArray[0]}, ${dataArray[1]}`
-
 block content
   main.main-page.main-page--padding
     section.main-page__notes.notes
@@ -11,7 +7,7 @@ block content
       ul.notes__list
         each publication in publications
           li.notes__list-item
-            +time(publication.createdDate)
+            time.notes__item-time(datetime=publication.createdAt) #{publication.createdAt}
             a.notes__item-text(href=`/publications/edit/${publication.id}`)= publication.title
             button.notes__button.button.button--close-item(type='button')
               span.visually-hidden Закрыть строку списка

@@ -12,8 +12,6 @@ const upload = multer({storage});
 publicationRouter.get(`/add`, async (_, res) => {
   const categories = await api.getCategories();
 
-  console.log(`categories - `, categories);
-
   return res.render(`pages/publications/edit`, {
     categories,
     publication: {},
@@ -25,12 +23,15 @@ publicationRouter.get(`/add`, async (_, res) => {
 
 publicationRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
-  const [publication, categories] = await Promise.all([
+  const [publication, comments] = await Promise.all([
     api.getPublication(id),
-    api.getCategories(),
+    api.getComments(id)
   ]);
 
+  const categories = publication.categories;
+
   return res.render(`pages/publications/publication`, {
+    comments,
     publication: {
       image: {
         fileName: `sea-fullsize@1x.jpg`,
@@ -39,11 +40,7 @@ publicationRouter.get(`/:id`, async (req, res) => {
       ...publication
     },
     themes: categories,
-    account: {
-      type: `user`,
-      name: `Алёна Фролова`,
-      avatar: `img/avatar-2.png`,
-    },
+    account: null
   });
 });
 
@@ -83,22 +80,6 @@ publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   } catch (e) {
     res.redirect(`back`);
   }
-});
-
-publicationRouter.get(`/category/:id`, (_, res) => {
-  return res.render(`pages/publications/categories`, {
-    title: `Типотека`,
-    displayedTitle: `Бизнес`,
-    description: `Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏`,
-    account: {
-      type: `user`,
-      name: `Алёна Фролова`,
-      avatar: `img/avatar-2.png`,
-    },
-    hasContent: true,
-    hasHot: true,
-    hasLastComments: true,
-  });
 });
 
 module.exports = publicationRouter;

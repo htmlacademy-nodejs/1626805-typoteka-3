@@ -1,7 +1,12 @@
 ul.themes(class= isPost ? ` post__themes` : ``)
   each theme in themes
     li.themes__item
-      a.themes__item-link(href='#')
-        | #{theme}
-        sup 88
-        button.themes__remove-btn(type='button') Удалить категорию
+      if activeCategoryId == theme.id
+        a.themes__item-link.themes__item-link--active(href=`/categories/${theme.id}`)
+          | #{theme.name}
+          //- sup 88 // TODO здесь кажется должно быть количество статей, которые относятся к данной теме - категории
+      else
+        a.themes__item-link(href=`/categories/${theme.id}`)
+          | #{theme.name}
+          //- sup 88 // TODO здесь кажется должно быть количество статей, которые относятся к данной теме - категории
+          button.themes__remove-btn(type='button') Удалить категорию

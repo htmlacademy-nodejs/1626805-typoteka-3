@@ -10,8 +10,9 @@ const initPublicationsApi = (app, service) => {
   app.use(`/publications`, publicationRouter);
 
   // GET /api/publications — ресурс возвращает список публикаций;
-  publicationRouter.get(`/`, async (_, res) => {
-    const publications = await service.findAll();
+  publicationRouter.get(`/`, async (req, res) => {
+    const {comments} = req.query;
+    const publications = await service.findAll(comments);
 
     res.status(HTTP_STATUS_CODE.OK).json(publications);
   });
