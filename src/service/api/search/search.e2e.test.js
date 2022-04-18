@@ -170,7 +170,7 @@ const app = express();
 app.use(express.json());
 search(app, dataService(mockData));
 
-describe(`API returns articles based on search query`, () => {
+describe(`API returns publications based on search query`, () => {
   let response;
 
   beforeAll(async () => {
@@ -185,11 +185,11 @@ describe(`API returns articles based on search query`, () => {
     expect(response.statusCode).toBe(HTTP_STATUS_CODE.OK);
   });
 
-  test(`1 article found`, () => {
+  test(`1 publication found`, () => {
     expect(response.body.length).toBe(1);
   });
 
-  test(`Article has correct id`, () => {
+  test(`Publication has correct id`, () => {
     expect(response.body[0].id).toBe(`07wH2`);
   });
 });

@@ -19,24 +19,28 @@ class API {
     return response.data;
   }
 
-  getArticles() {
-    return this._load(`/articles`);
+  getPublications({comments}) {
+    return this._load(`/publications`, {params: {comments}});
   }
 
-  getArticle(id) {
-    return this._load(`/articles/${id}`);
+  getPublication(id) {
+    return this._load(`/publications/${id}`);
   }
 
   search(query) {
     return this._load(`/search`, {params: {query}});
   }
 
+  getComments(id) {
+    return this._load(`/comments/${id}`);
+  }
+
   async getCategories() {
     return this._load(`/categories`);
   }
 
-  async createArticle(data) {
-    return this._load(`/articles`, {
+  async createPublication(data) {
+    return this._load(`/publications`, {
       method: `POST`,
       data
     });

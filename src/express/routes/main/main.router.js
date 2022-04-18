@@ -5,13 +5,20 @@ const mainRouter = new Router();
 const api = require(`../../api`).getAPI();
 
 mainRouter.get(`/`, async (_, res) => {
-  const [articles, catagories] = await Promise.all([
-    api.getArticles(),
+  const [publications, catagories] = await Promise.all([
+    api.getPublications({comments: true}),
     api.getCategories(),
   ]);
 
-  res.render(`pages/main`, {
-    previews: articles,
+  const publicationsWithPicture = publications.map((publication) => {
+    return {
+      ...publication,
+      picture: `sea-fullsize@1x.jpg`
+    };
+  });
+
+  return res.render(`pages/main`, {
+    previews: publicationsWithPicture,
     themes: catagories,
     title: `Типотека`,
     hiddenTitle: ` Главная страница личного блога Типотека`,
@@ -44,7 +51,7 @@ mainRouter.get(`/login`, (_, res) => {
 });
 
 mainRouter.get(`/search`, async (req, res) => {
-  const {search} = req.query;
+  const {search = ``} = req.query;
   let results = [];
 
   try {
@@ -58,11 +65,7 @@ mainRouter.get(`/search`, async (req, res) => {
     searchValue: search,
     title: `Типотека`,
     hiddenTitle: ` Страница поиска личного блога Типотека`,
-    account: {
-      type: `admin`,
-      name: `Алёна Фролова`,
-      avatar: `img/avatar-2.png`,
-    },
+    account: null
   });
 });
 

@@ -26,7 +26,7 @@ const generateComments = (comments) => {
 };
 
 // generateObject
-const generateArticle = async () => {
+const generatePublication = async () => {
   const titlesContent = await asyncReadFile(getPathToData(`titles.txt`));
   const sentencesContent = await asyncReadFile(getPathToData(`sentences.txt`));
   const categoriesContent = await asyncReadFile(getPathToData(`categories.txt`));
@@ -61,25 +61,25 @@ module.exports = {
   name: `--generate`,
   async run(count) {
     const [value] = count;
-    const countArticles = parseInt(value, 10);
-    const countIsNaN = Number.isNaN(countArticles);
+    const countPublications = parseInt(value, 10);
+    const countIsNaN = Number.isNaN(countPublications);
     let result = [];
 
     // Если переданное значение не является числом
     if (countIsNaN) {
-      const article = await generateArticle();
-      result.push(article);
+      const publication = await generatePublication();
+      result.push(publication);
     }
 
     // Если переданное значение является числом и больше MAX_ITEMS
-    if (!countIsNaN && countArticles > MAX_ITEMS) {
+    if (!countIsNaN && countPublications > MAX_ITEMS) {
       console.info(chalk.red(`Не больше 1000 публикаций`));
       process.exit(ExitCode.error);
     }
 
     // Если переданное значение является числом и не больше MAX_ITEMS
-    if (!countIsNaN && countArticles <= MAX_ITEMS) {
-      result = await Promise.all([...Array(countArticles)].map(async () => await generateArticle()));
+    if (!countIsNaN && countPublications <= MAX_ITEMS) {
+      result = await Promise.all([...Array(countPublications)].map(async () => await generatePublication()));
     }
 
     const content = JSON.stringify(result, ``, 2);
