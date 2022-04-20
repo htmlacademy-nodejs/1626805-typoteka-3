@@ -6,7 +6,7 @@ const defineComment = require(`./comment`);
 const definePublication = require(`./publication`);
 const defineRole = require(`./role`);
 const defineUser = require(`./user`);
-const Aliase = require(`./aliase`);
+const Alias = require(`./alias`);
 
 const define = (sequelize) => {
   class PublicationCategory extends Model {}
@@ -20,14 +20,14 @@ const define = (sequelize) => {
   const User = defineUser(sequelize);
 
   // У пользователя могут быть несколько комментов
-  User.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `userId`, onDelete: `cascade`});
+  User.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `userId`, onDelete: `cascade`});
   // // У пользователя могут быть несколько публикаций
-  User.hasMany(Publication, {as: Aliase.PUBLICATIONS, foreignKey: `userId`, onDelete: `cascade`});
+  User.hasMany(Publication, {as: Alias.PUBLICATIONS, foreignKey: `userId`, onDelete: `cascade`});
   // // У пользователя может быть только одна роль
-  User.hasOne(Role, {as: Aliase.ROLES, foreignKey: `userId`});
+  User.hasOne(Role, {as: Alias.ROLES, foreignKey: `userId`});
 
   // // У публикации может быть несколько комментариев
-  Publication.hasMany(Comment, {as: Aliase.COMMENTS, foreignKey: `publicationId`});
+  Publication.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `publicationId`});
   // // Но у публикации только один владелец - user
   Publication.belongsTo(User, {foreignKey: `userId`});
 
@@ -40,9 +40,9 @@ const define = (sequelize) => {
 
   // Публикация может быть в разных категорях
   // Категории могут относиться к разным публикациям
-  Publication.belongsToMany(Category, {through: PublicationCategory, as: Aliase.CATEGORIES});
-  Category.belongsToMany(Publication, {through: PublicationCategory, as: Aliase.PUBLICATIONS});
-  Category.hasMany(PublicationCategory, {as: Aliase.PUBLICATION_CATEGORIES});
+  Publication.belongsToMany(Category, {through: PublicationCategory, as: Alias.CATEGORIES});
+  Category.belongsToMany(Publication, {through: PublicationCategory, as: Alias.PUBLICATIONS});
+  Category.hasMany(PublicationCategory, {as: Alias.PUBLICATION_CATEGORIES});
 
   return {
     Category,

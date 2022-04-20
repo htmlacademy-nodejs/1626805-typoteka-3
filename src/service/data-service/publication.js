@@ -1,6 +1,6 @@
 'use strict';
 
-const Aliase = require(`../models/aliase`);
+const Alias = require(`../models/alias`);
 
 class PublicationService {
   constructor(sequelize) {
@@ -9,10 +9,10 @@ class PublicationService {
   }
 
   async findAll(needComments) {
-    const include = [Aliase.CATEGORIES];
+    const include = [Alias.CATEGORIES];
 
     if (needComments) {
-      include.push(Aliase.COMMENTS);
+      include.push(Alias.COMMENTS);
     }
 
     const publications = await this._Publication.findAll({
@@ -25,7 +25,7 @@ class PublicationService {
   }
 
   findOne(id) {
-    return this._Publication.findByPk(id, {include: [Aliase.CATEGORIES]});
+    return this._Publication.findByPk(id, {include: [Alias.CATEGORIES]});
   }
 
   async create(publicationData) {

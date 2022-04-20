@@ -10,20 +10,14 @@ const {
   generateRandomItems,
   textToArrayByDivider,
   asyncWriteFile,
-  asyncReadFile
+  asyncReadFile,
+  generateComments
 } = require(`../../utils`);
 const chalk = require(`chalk`);
 const {ExitCode, MAX_ID_LENGTH} = require(`../../constants`);
 
 const MAX_ANNOUNCE_COUNT = 5;
 const MAX_ITEMS = 1000;
-
-// return [ { id: nanoId, text: string } ]
-const generateComments = (comments) => {
-  return comments.reduce((acc, cur) => {
-    return [...acc, {id: nanoid(MAX_ID_LENGTH), text: cur}];
-  }, []);
-};
 
 // generateObject
 const generatePublication = async () => {
@@ -40,7 +34,7 @@ const generatePublication = async () => {
   const randomIndexForTitle = getRandomIntInclusive(0, titlesList.length - 1);
   const datePublication = getDateBeforeByMonth();
   const comments = generateRandomItems(commentsList);
-  const categorys = generateRandomItems(categoriesList);
+  const categories = generateRandomItems(categoriesList);
 
   return {
     id: nanoid(5),
@@ -48,8 +42,8 @@ const generatePublication = async () => {
     createdDate: formateDate(datePublication),
     announce: generateText(MAX_ANNOUNCE_COUNT, sentencesList),
     fullText: generateText(sentencesList.length - 1, sentencesList),
-    category: categorys,
-    comments: generateComments(comments)
+    category: categories,
+    comments: generateComments(comments, MAX_ID_LENGTH)
   };
 };
 
@@ -61,25 +55,25 @@ module.exports = {
   name: `--generate`,
   async run(count) {
     const [value] = count;
-    const countPublications = parseInt(value, 10);
-    const countIsNaN = Number.isNaN(countPublications);
+    const publicationsCount = parseInt(value, 10);
+    const isCountNaN = Number.isNaN(publicationsCount);
     let result = [];
 
     // Если переданное значение не является числом
-    if (countIsNaN) {
+    if (isCountNaN) {
       const publication = await generatePublication();
       result.push(publication);
     }
 
     // Если переданное значение является числом и больше MAX_ITEMS
-    if (!countIsNaN && countPublications > MAX_ITEMS) {
+    if (!isCountNaN && publicationsCount > MAX_ITEMS) {
       console.info(chalk.red(`Не больше 1000 публикаций`));
       process.exit(ExitCode.error);
     }
 
     // Если переданное значение является числом и не больше MAX_ITEMS
-    if (!countIsNaN && countPublications <= MAX_ITEMS) {
-      result = await Promise.all([...Array(countPublications)].map(async () => await generatePublication()));
+    if (!isCountNaN && publicationsCount <= MAX_ITEMS) {
+      result = await Promise.all([...Array(publicationsCount)].map(async () => await generatePublication()));
     }
 
     const content = JSON.stringify(result, ``, 2);
