@@ -88,7 +88,6 @@ function asyncReadFile(pathFile) {
   return new Promise((res, rej) => {
     fs.readFile(pathFile, `utf8`, (err, data) => {
       if (err) {
-        console.log(`pathFile - `, pathFile);
         rej(`Ошибка чтения файла...`);
       }
 

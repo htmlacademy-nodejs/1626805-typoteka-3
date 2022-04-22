@@ -19,8 +19,9 @@ class API {
     return response.data;
   }
 
-  getPublications({comments}) {
-    return this._load(`/publications`, {params: {comments}});
+
+  getPublications({offset, limit, comments}) {
+    return this._load(`/publications`, {params: {offset, limit, comments}});
   }
 
   getPublication(id) {

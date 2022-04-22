@@ -56,6 +56,19 @@ class PublicationService {
     return !!deletedRows;
   }
 
+  async findPage({limit, offset}) {
+    const {count, rows} = await this._Publication.findAndCountAll({
+      limit,
+      offset,
+      include: [Alias.CATEGORIES],
+      order: [
+        [`createdAt`, `DESC`]
+      ],
+      distinct: true
+    });
+
+    return {count, publications: rows};
+  }
 }
 
 module.exports = PublicationService;

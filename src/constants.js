@@ -10,6 +10,8 @@ const DEFAULT_COMMAND = `--version`;
 
 const MAX_ID_LENGTH = 5;
 
+const PUBLICATIONS_PER_PAGE = 3;
+
 const EXIT_CODE = {
   success: 0,
   error: 1
@@ -54,5 +56,6 @@ module.exports = {
   VALIDATION,
   Env,
   DEFAULT_COUNT_PUBLICATION,
-  MAX_ANNOUNCE_COUNT
+  MAX_ANNOUNCE_COUNT,
+  PUBLICATIONS_PER_PAGE
 };
