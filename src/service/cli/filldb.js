@@ -53,7 +53,7 @@ module.exports = {
 
     const publicationPromises = publications.map(async (publication) => {
       const publicationModel = await Publication.create(publication, {include: [Alias.COMMENTS]});
-      await publicationModel.addCategories(publication.categories);
+      await publicationModel.addCategories(publication.category);
     });
 
     await Promise.all(publicationPromises);

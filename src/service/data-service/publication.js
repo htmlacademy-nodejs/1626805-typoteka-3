@@ -29,8 +29,16 @@ class PublicationService {
   }
 
   async create(publicationData) {
+    const {category} = publicationData;
+
+    const categoryModels = await this._Category.bulkCreate(
+        category.map((item) => ({name: item}))
+    );
+
+    publicationData.category = categoryModels;
+
     const publication = await this._Publication.create(publicationData);
-    await publication.addCategories(publicationData.categories);
+    await publication.addCategories(publicationData.category);
     return publication.get();
   }
 

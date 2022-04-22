@@ -13,7 +13,7 @@ mainRouter.get(`/`, async (_, res) => {
   const publicationsWithPicture = publications.map((publication) => {
     return {
       ...publication,
-      picture: `sea-fullsize@1x.jpg`
+      picture: publication.picture || `sea-fullsize@1x.jpg`
     };
   });
 

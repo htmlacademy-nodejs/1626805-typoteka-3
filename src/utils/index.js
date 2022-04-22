@@ -130,7 +130,7 @@ const generatePublications = async (count, titles, categories, sentences, commen
       title: titles[randomTitleIndex],
       announcement: generateText(MAX_ANNOUNCE_COUNT, sentences),
       text: generateText(sentences.length - 1, sentences),
-      categories: getRandomSubarray(categories),
+      category: getRandomSubarray(categories),
       comments: getRandomSubarray(comments.map((item) => ({text: item})))
     };
   });

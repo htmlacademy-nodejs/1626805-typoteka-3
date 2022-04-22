@@ -45,6 +45,19 @@ class API {
       data
     });
   }
+
+  async editPublication(id, data) {
+    return this._load(`/publications/${id}`, {
+      method: `PUT`,
+      data
+    });
+  }
+
+  async deletePublication(id) {
+    return this._load(`/publications/${id}`, {
+      method: `DELETE`
+    });
+  }
 }
 
 const defaultAPI = new API(defaultUrl, TIMEOUT);
