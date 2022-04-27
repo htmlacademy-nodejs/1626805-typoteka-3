@@ -19,8 +19,9 @@ class API {
     return response.data;
   }
 
-  getPublications({comments}) {
-    return this._load(`/publications`, {params: {comments}});
+
+  getPublications({offset, limit, comments}) {
+    return this._load(`/publications`, {params: {offset, limit, comments}});
   }
 
   getPublication(id) {
@@ -43,6 +44,19 @@ class API {
     return this._load(`/publications`, {
       method: `POST`,
       data
+    });
+  }
+
+  async editPublication(id, data) {
+    return this._load(`/publications/${id}`, {
+      method: `PUT`,
+      data
+    });
+  }
+
+  async deletePublication(id) {
+    return this._load(`/publications/${id}`, {
+      method: `DELETE`
     });
   }
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-const Aliase = require(`../models/aliase`);
+const Alias = require(`../models/alias`);
 
 class PublicationService {
   constructor(sequelize) {
@@ -9,10 +9,10 @@ class PublicationService {
   }
 
   async findAll(needComments) {
-    const include = [Aliase.CATEGORIES];
+    const include = [Alias.CATEGORIES];
 
     if (needComments) {
-      include.push(Aliase.COMMENTS);
+      include.push(Alias.COMMENTS);
     }
 
     const publications = await this._Publication.findAll({
@@ -25,12 +25,20 @@ class PublicationService {
   }
 
   findOne(id) {
-    return this._Publication.findByPk(id, {include: [Aliase.CATEGORIES]});
+    return this._Publication.findByPk(id, {include: [Alias.CATEGORIES]});
   }
 
   async create(publicationData) {
+    const {category} = publicationData;
+
+    const categoryModels = await this._Category.bulkCreate(
+        category.map((item) => ({name: item}))
+    );
+
+    publicationData.category = categoryModels;
+
     const publication = await this._Publication.create(publicationData);
-    await publication.addCategories(publicationData.categories);
+    await publication.addCategories(publicationData.category);
     return publication.get();
   }
 
@@ -48,6 +56,19 @@ class PublicationService {
     return !!deletedRows;
   }
 
+  async findPage({limit, offset}) {
+    const {count, rows} = await this._Publication.findAndCountAll({
+      limit,
+      offset,
+      include: [Alias.CATEGORIES],
+      order: [
+        [`createdAt`, `DESC`]
+      ],
+      distinct: true
+    });
+
+    return {count, publications: rows};
+  }
 }
 
 module.exports = PublicationService;

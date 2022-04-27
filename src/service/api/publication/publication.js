@@ -11,10 +11,15 @@ const initPublicationsApi = (app, service) => {
 
   // GET /api/publications — ресурс возвращает список публикаций;
   publicationRouter.get(`/`, async (req, res) => {
-    const {comments} = req.query;
-    const publications = await service.findAll(comments);
+    const {offset, limit, comments} = req.query;
 
-    res.status(HTTP_STATUS_CODE.OK).json(publications);
+    let result;
+    if (limit || offset) {
+      result = await service.findPage({limit, offset});
+    } else {
+      result = await service.findAll(comments);
+    }
+    res.status(HTTP_STATUS_CODE.OK).json(result);
   });
 
   // GET /api/publications/:publicationId — возвращает полную информацию о публикации;

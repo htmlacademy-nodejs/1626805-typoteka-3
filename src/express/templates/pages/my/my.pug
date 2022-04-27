@@ -4,10 +4,12 @@ block content
   main.main-page.main-page--padding
     section.main-page__notes.notes
       h1.notes__title Мои записи
-      ul.notes__list
-        each publication in publications
-          li.notes__list-item
-            time.notes__item-time(datetime=publication.createdAt) #{publication.createdAt}
-            a.notes__item-text(href=`/publications/edit/${publication.id}`)= publication.title
-            button.notes__button.button.button--close-item(type='button')
-              span.visually-hidden Закрыть строку списка
+        ul.notes__list
+          each publication in publications
+            li.notes__list-item
+              form(action='/publications/delete' method='POST' autocomplete="off")
+                time.notes__item-time(datetime=publication.createdAt) #{publication.createdAt}
+                a.notes__item-text(href=`/publications/edit/${publication.id}`)= publication.title
+                input(type='text' id=`id-${publication.id}` name='publicationId' value=`${publication.id}` hidden)
+                button.notes__button.button.button--close-item(type='submit')
+                  span.visually-hidden Закрыть строку списка

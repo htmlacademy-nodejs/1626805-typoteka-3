@@ -62,16 +62,14 @@ publicationRouter.get(`/edit/:id`, async (req, res) => {
 
 publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   const {body, file} = req;
-  const {createdDate, title, announce, fullText, category} = body;
+  const {title, announcement, text, category} = body;
 
   const newPublication = {
     picture: file ? file.filename : ``,
-    createdDate,
     title,
-    announce,
-    fullText,
-    category,
-    comments: []
+    announcement,
+    text,
+    category: Array.isArray(category) ? category : [category]
   };
 
   try {
@@ -79,6 +77,39 @@ publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
     res.redirect(`/my`);
   } catch (e) {
     res.redirect(`back`);
+  }
+});
+
+publicationRouter.post(`/edit/:id`, upload.single(`avatar`), async (req, res) => {
+  const {id} = req.params;
+  const {body, file} = req;
+  const {title, announcement, text, category} = body;
+
+  const updatedPublication = {
+    picture: file ? file.filename : ``,
+    title,
+    announcement,
+    text,
+    category: Array.isArray(category) ? category : [category]
+  };
+
+  try {
+    await api.editPublication(id, updatedPublication);
+    res.redirect(`/my`);
+  } catch (e) {
+    res.redirect(`back`);
+  }
+});
+
+publicationRouter.post(`/delete`, async (req, res) => {
+  const {body: {publicationId}} = req;
+
+  try {
+    await api.deletePublication(publicationId);
+    res.redirect(`/my`);
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/my`);
   }
 });
 

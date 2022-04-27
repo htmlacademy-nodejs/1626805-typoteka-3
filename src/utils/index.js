@@ -1,6 +1,9 @@
 'use strict';
 
 const fs = require(`fs`);
+const path = require(`path`);
+const {nanoid} = require(`nanoid`);
+const {MAX_ANNOUNCE_COUNT} = require(`../constants`);
 
 //  Максимум и минимум включаются
 //  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values_inclusive
@@ -65,13 +68,13 @@ function generateRandomItems(items) {
   }).filter((item) => item);
 }
 
-function textToArrayByDivider(data, divider) {
-  return data.split(divider);
+function splitString(rawText, divider) {
+  return rawText.split(divider);
 }
 
-function asyncWriteFile(path, data) {
+function asyncWriteFile(pathFile, data) {
   return new Promise((res, rej) => {
-    fs.writeFile(path, data, (err) => {
+    fs.writeFile(pathFile, data, (err) => {
       if (err) {
         rej(`Ошибка при записи файла...`);
       }
@@ -81,9 +84,9 @@ function asyncWriteFile(path, data) {
   });
 }
 
-function asyncReadFile(path) {
+function asyncReadFile(pathFile) {
   return new Promise((res, rej) => {
-    fs.readFile(path, `utf8`, (err, data) => {
+    fs.readFile(pathFile, `utf8`, (err, data) => {
       if (err) {
         rej(`Ошибка чтения файла...`);
       }
@@ -107,14 +110,42 @@ function getRandomSubarray(items) {
   return result;
 }
 
+function getPathFile(directory, fileName) {
+  return path.join(__dirname, `..`, directory, fileName);
+}
+
+// return [ { id: nanoId, text: string } ]
+function generateComments(comments, maxIdLength) {
+  return comments.reduce((acc, cur) => {
+    return [...acc, {id: nanoid(maxIdLength), text: cur}];
+  }, []);
+}
+
+const generatePublications = async (count, titles, categories, sentences, comments) => {
+  return Array(count).fill({}).map(() => {
+    const randomTitleIndex = getRandomIntInclusive(0, titles.length - 1);
+
+    return {
+      title: titles[randomTitleIndex],
+      announcement: generateText(MAX_ANNOUNCE_COUNT, sentences),
+      text: generateText(sentences.length - 1, sentences),
+      category: getRandomSubarray(categories),
+      comments: getRandomSubarray(comments.map((item) => ({text: item})))
+    };
+  });
+};
+
 module.exports = {
   getRandomIntInclusive,
   getDateBeforeByMonth,
   formateDate,
   generateText,
   generateRandomItems,
-  textToArrayByDivider,
+  splitString,
   asyncWriteFile,
   asyncReadFile,
-  getRandomSubarray
+  getRandomSubarray,
+  getPathFile,
+  generateComments,
+  generatePublications
 };
