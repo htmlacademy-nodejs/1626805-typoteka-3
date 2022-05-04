@@ -36,6 +36,13 @@ class API {
     return this._load(`/comments/${id}`);
   }
 
+  async addComments(id, data) {
+    return this._load(`/comments/${id}`, {
+      method: `POST`,
+      data
+    });
+  }
+
   async getCategories() {
     return this._load(`/categories`);
   }

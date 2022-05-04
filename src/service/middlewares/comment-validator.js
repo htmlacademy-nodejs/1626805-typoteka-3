@@ -1,15 +1,26 @@
 'use strict';
 
+const Joi = require(`joi`);
 const {HTTP_STATUS_CODE, VALIDATION} = require(`../../constants`);
 
+const ErrorCommentMessage = {
+  TEXT: `Комментарий содержит меньше 20 символов`
+};
+
+const schema = Joi.object({
+  text: Joi.string().min(VALIDATION.MIN_COMMENT_LENGTH).required().messages({
+    'string.min': ErrorCommentMessage.TEXT
+  })
+});
+
 module.exports = (req, res, next) => {
-  // Текст комментария. Обязательно для заполнения. Минимум 20 символов.
-  const {text} = req.body;
+  const comment = req.body;
+  const {error} = schema.validate(comment, {abortEarly: false});
 
-
-  if (!text || text.length < VALIDATION.MIN_COMMENT_LENGTH) {
-    res.status(HTTP_STATUS_CODE.BAD_REQUEST).send(`Bad request`);
+  if (error) {
+    return res.status(HTTP_STATUS_CODE.BAD_REQUEST)
+      .send(error.details.map((err) => err.message).join(`\n`));
   }
 
-  next();
+  return next();
 };

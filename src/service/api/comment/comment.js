@@ -42,7 +42,7 @@ const initCommentApi = (app, service) => {
       res.status(HTTP_STATUS_CODE.NOT_FOUND).send(`Not found with ${publicationId}`);
     }
 
-    res.status(HTTP_STATUS_CODE.CREATED).json(newComment);
+    return res.status(HTTP_STATUS_CODE.CREATED).json(newComment);
   });
 };
 

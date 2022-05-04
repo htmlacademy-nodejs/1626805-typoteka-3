@@ -23,6 +23,7 @@ publicationRouter.get(`/add`, async (_, res) => {
 
 publicationRouter.get(`/:id`, async (req, res) => {
   const {id} = req.params;
+
   const [publication, comments] = await Promise.all([
     api.getPublication(id),
     api.getComments(id)
@@ -40,7 +41,10 @@ publicationRouter.get(`/:id`, async (req, res) => {
       ...publication
     },
     themes: categories,
-    account: null
+    account: {
+      type: `user`
+    },
+    isPost: true
   });
 });
 
@@ -62,14 +66,14 @@ publicationRouter.get(`/edit/:id`, async (req, res) => {
 
 publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   const {body, file} = req;
-  const {title, announcement, text, category} = body;
+  const {title, announcement, text, categories} = body;
 
   const newPublication = {
     picture: file ? file.filename : ``,
     title,
     announcement,
     text,
-    category: Array.isArray(category) ? category : [category]
+    categories: Array.isArray(categories) ? categories : [categories]
   };
 
   try {
@@ -83,14 +87,14 @@ publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
 publicationRouter.post(`/edit/:id`, upload.single(`avatar`), async (req, res) => {
   const {id} = req.params;
   const {body, file} = req;
-  const {title, announcement, text, category} = body;
+  const {title, announcement, text, categories} = body;
 
   const updatedPublication = {
     picture: file ? file.filename : ``,
     title,
     announcement,
     text,
-    category: Array.isArray(category) ? category : [category]
+    categories: Array.isArray(categories) ? categories : [categories]
   };
 
   try {

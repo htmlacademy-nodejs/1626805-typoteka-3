@@ -1,5 +1,5 @@
 ul.themes(class= isPost ? ` post__themes` : ``)
-  each category in categories
+  each category in themes
     li.themes__item
       if activeCategoryId == category.id
         a.themes__item-link.themes__item-link--active(href=`/categories/${category.id}`)

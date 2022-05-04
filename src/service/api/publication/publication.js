@@ -38,7 +38,7 @@ const initPublicationsApi = (app, service) => {
   publicationRouter.post(`/`, publicationValidator, async (req, res) => {
     const newPublication = await service.create(req.body);
 
-    res.status(HTTP_STATUS_CODE.CREATED).json(newPublication);
+    return res.status(HTTP_STATUS_CODE.CREATED).json(newPublication);
   });
 
   // PUT /api/publications/:publicationId — редактирует определённую публикацию;
