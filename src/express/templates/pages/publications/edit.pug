@@ -45,3 +45,5 @@ block content
                 div.form__field.form__field--publication-text
                   label
                     textarea(name='text' rows='5' placeholder='Полный текст публикации') #{publication.text}
+            each message in validationMessages
+              p #{message}

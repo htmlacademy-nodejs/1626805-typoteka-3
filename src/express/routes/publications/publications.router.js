@@ -6,6 +6,7 @@ const multer = require(`multer`);
 const publicationRouter = new Router();
 const api = require(`../../api`).getAPI();
 const storage = require(`../../disk-storage`);
+const {prepareErrors} = require(`../../../utils`);
 
 const upload = multer({storage});
 
@@ -14,6 +15,7 @@ publicationRouter.get(`/add`, async (_, res) => {
 
   return res.render(`pages/publications/edit`, {
     categories,
+    validationMessages: [],
     publication: {},
     account: {
       type: `admin`,
@@ -29,10 +31,9 @@ publicationRouter.get(`/:id`, async (req, res) => {
     api.getComments(id)
   ]);
 
-  const categories = publication.categories;
-
   return res.render(`pages/publications/publication`, {
     comments,
+    validationMessages: [],
     publication: {
       image: {
         fileName: `sea-fullsize@1x.jpg`,
@@ -40,12 +41,46 @@ publicationRouter.get(`/:id`, async (req, res) => {
       },
       ...publication
     },
-    themes: categories,
+    themes: publication.categories,
     account: {
       type: `user`
     },
     isPost: true
   });
+});
+
+publicationRouter.post(`/comments/add`, async (req, res) => {
+  const {body} = req;
+  const {comment, publicationId} = body;
+
+  try {
+    await api.addComments(publicationId, {text: comment});
+    res.redirect(`/publications/${publicationId}`);
+  } catch (error) {
+    const [publication, comments] = await Promise.all([
+      api.getPublication(publicationId),
+      api.getComments(publicationId)
+    ]);
+    const validationMessages = prepareErrors(error);
+
+    res.render(`pages/publications/publication`, {
+      comments,
+      validationMessages,
+      publication: {
+        image: {
+          fileName: `sea-fullsize@1x.jpg`,
+          alt: `пейзаж море, скалы, пляж`,
+        },
+        ...publication
+      },
+      themes: publication.categories,
+      account: {
+        type: `user`
+      },
+      isPost: true
+    });
+  }
+
 });
 
 publicationRouter.get(`/edit/:id`, async (req, res) => {
@@ -58,6 +93,7 @@ publicationRouter.get(`/edit/:id`, async (req, res) => {
   return res.render(`pages/publications/edit`, {
     publication,
     categories,
+    validationMessages: [],
     account: {
       type: `admin`,
     }
@@ -79,8 +115,19 @@ publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
   try {
     await api.createPublication(newPublication);
     res.redirect(`/my`);
-  } catch (e) {
-    res.redirect(`back`);
+  } catch (error) {
+    // eslint-disable-next-line no-shadow
+    const categories = await api.getCategories();
+    const validationMessages = prepareErrors(error);
+
+    res.render(`pages/publications/edit`, {
+      categories,
+      validationMessages,
+      publication: {},
+      account: {
+        type: `admin`,
+      },
+    });
   }
 });
 
