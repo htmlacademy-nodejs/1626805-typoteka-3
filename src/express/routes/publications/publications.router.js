@@ -2,6 +2,7 @@
 
 const {Router} = require(`express`);
 const multer = require(`multer`);
+const sanitizeHtml = require(`sanitize-html`);
 
 const publicationRouter = new Router();
 const api = require(`../../api`).getAPI();
@@ -54,7 +55,7 @@ publicationRouter.post(`/comments/add`, async (req, res) => {
   const {comment, publicationId} = body;
 
   try {
-    await api.addComments(publicationId, {text: comment});
+    await api.addComments(publicationId, {text: sanitizeHtml(comment)});
     res.redirect(`/publications/${publicationId}`);
   } catch (error) {
     const [publication, comments] = await Promise.all([
@@ -106,9 +107,9 @@ publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
 
   const newPublication = {
     picture: file ? file.filename : ``,
-    title,
-    announcement,
-    text,
+    title: sanitizeHtml(title),
+    announcement: sanitizeHtml(announcement),
+    text: sanitizeHtml(text),
     categories: Array.isArray(categories) ? categories : [categories]
   };
 
@@ -138,9 +139,9 @@ publicationRouter.post(`/edit/:id`, upload.single(`avatar`), async (req, res) =>
 
   const updatedPublication = {
     picture: file ? file.filename : ``,
-    title,
-    announcement,
-    text,
+    title: sanitizeHtml(title),
+    announcement: sanitizeHtml(announcement),
+    text: sanitizeHtml(text),
     categories: Array.isArray(categories) ? categories : [categories]
   };
 
