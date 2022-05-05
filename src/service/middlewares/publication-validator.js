@@ -37,9 +37,6 @@ module.exports = (req, res, next) => {
   const newPublication = req.body;
   const {error} = schema.validate(newPublication, {abortEarly: false});
 
-  console.log(`newPublication - `, newPublication);
-  console.log(`error - `, error);
-
   if (error) {
     return res.status(HTTP_STATUS_CODE.BAD_REQUEST)
       .send(error.details.map((err) => err.message).join(`\n`));

@@ -2,7 +2,7 @@
 
 const {Router} = require(`express`);
 const {HTTP_STATUS_CODE} = require(`../../../constants`);
-const {publicationValidator} = require(`../../middlewares`);
+const {publicationValidator, paramsIdValidator} = require(`../../middlewares`);
 
 const initPublicationsApi = (app, service) => {
   const publicationRouter = new Router();
@@ -23,7 +23,7 @@ const initPublicationsApi = (app, service) => {
   });
 
   // GET /api/publications/:publicationId — возвращает полную информацию о публикации;
-  publicationRouter.get(`/:publicationId`, async (req, res) => {
+  publicationRouter.get(`/:publicationId`, paramsIdValidator, async (req, res) => {
     const {publicationId} = req.params;
     const publication = await service.findOne(publicationId);
 
