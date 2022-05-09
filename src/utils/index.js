@@ -135,6 +135,10 @@ const generatePublications = async (count, titles, categories, sentences, commen
   });
 };
 
+const prepareErrors = (errors) => {
+  return errors.response.data.split(`\n`);
+};
+
 module.exports = {
   getRandomIntInclusive,
   getDateBeforeByMonth,
@@ -147,5 +151,6 @@ module.exports = {
   getRandomSubarray,
   getPathFile,
   generateComments,
-  generatePublications
+  generatePublications,
+  prepareErrors
 };

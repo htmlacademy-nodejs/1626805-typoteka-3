@@ -35,7 +35,7 @@ block content
                   each category in categories
                     div.new-publication__checkbox.new-publication__checkbox--auto
                       - const isChecked = isEdit && publication.categories.map(item => item.id).includes(category.id)
-                      input(id=category.id type='checkbox' name="category" value=category.name checked=isChecked)
+                      input(id=category.id type='checkbox' name="categories" value=category.name checked=isChecked)
                       label(for=category.id) #{category.name}
                   a.new-publication__form-link.button.button--transparent(href='#') Добавить категорию
               div.form__wrapper.form__wrapper--text
@@ -44,4 +44,6 @@ block content
                     textarea(name='announcement' rows='2' placeholder='Анонс публикации' required) #{publication.announcement}
                 div.form__field.form__field--publication-text
                   label
-                    textarea(name='text' rows='5' placeholder='Полный текст публикации' required) #{publication.text}
+                    textarea(name='text' rows='5' placeholder='Полный текст публикации') #{publication.text}
+            each message in validationMessages
+              p #{message}

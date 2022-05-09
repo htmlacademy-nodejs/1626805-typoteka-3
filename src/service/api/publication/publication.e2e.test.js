@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO: с тестами полный п***ц нужно подумать как их вообще запускать
+// Потому что сейчас используется не файлы а БД
 const express = require(`express`);
 const request = require(`supertest`);
 
