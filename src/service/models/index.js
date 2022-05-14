@@ -21,14 +21,14 @@ const define = (sequelize) => {
 
   // У пользователя могут быть несколько комментов
   User.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `userId`, onDelete: `cascade`});
-  // // У пользователя могут быть несколько публикаций
+  // У пользователя могут быть несколько публикаций
   User.hasMany(Publication, {as: Alias.PUBLICATIONS, foreignKey: `userId`, onDelete: `cascade`});
-  // // У пользователя может быть только одна роль
+  // У пользователя может быть только одна роль
   User.hasOne(Role, {as: Alias.ROLES, foreignKey: `userId`});
 
-  // // У публикации может быть несколько комментариев
+  // У публикации может быть несколько комментариев
   Publication.hasMany(Comment, {as: Alias.COMMENTS, foreignKey: `publicationId`});
-  // // Но у публикации только один владелец - user
+  // Но у публикации только один владелец - user
   Publication.belongsTo(User, {foreignKey: `userId`});
 
   // Но у комментария только один владелец - user

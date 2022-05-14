@@ -5,5 +5,6 @@ module.exports = {
   PUBLICATIONS: `publications`,
   ROLES: `roles`,
   CATEGORIES: `categories`,
-  PUBLICATION_CATEGORIES: `publicationCategories`
+  PUBLICATION_CATEGORIES: `publicationCategories`,
+  USERS: `users`
 };

@@ -9,15 +9,34 @@ const {
   asyncReadFile,
   splitString,
   getPathFile,
-  generatePublications
+  generatePublications,
+  getRandomIntInclusive
 } = require(`../../utils`);
 const {DEFAULT_COUNT_PUBLICATION} = require(`../../constants`);
+const passwordUtils = require(`../lib/password`);
 
 const logger = getLogger({name: namespace.API});
 
 module.exports = {
   name: `--filldb`,
   async run(args) {
+    const users = [
+      {
+        firstName: `Иван`,
+        lastName: `Иванов`,
+        email: `ivanov@example.com`,
+        passwordHash: await passwordUtils.hash(`ivanov`),
+        avatar: `avatar01.jpg`
+      },
+      {
+        firstName: `Пётр`,
+        lastName: `Петров`,
+        email: `petrov@example.com`,
+        passwordHash: await passwordUtils.hash(`petrov`),
+        avatar: `avatar02.jpg`
+      }
+    ];
+
     try {
       logger.info(`Trying to connect to database...`);
       await sequelize.authenticate();
@@ -27,7 +46,7 @@ module.exports = {
       process.exit(1);
     }
 
-    const {Category, Publication} = defineModels(sequelize);
+    const {Category, Publication, User} = defineModels(sequelize);
 
     defineModels(sequelize);
 
@@ -43,6 +62,13 @@ module.exports = {
     const comments = splitString(commentsContent, `\n`);
     const categories = splitString(categoriesContent, `\n`);
 
+    const userModels = await User.bulkCreate(users, {include: [Alias.PUBLICATIONS, Alias.COMMENTS]});
+
+    const userIdByEmail = userModels.reduce((acc, next) => ({
+      [next.email]: next.id,
+      ...acc
+    }), {});
+
     const categoryModels = await Category.bulkCreate(
         categories.map((item) => ({name: item}))
     );
@@ -52,6 +78,10 @@ module.exports = {
     const publications = await generatePublications(publicationsCount, titles, categoryModels, sentences, comments);
 
     const publicationPromises = publications.map(async (publication) => {
+      const randomIndex = getRandomIntInclusive(0, 1);
+      const randomEmail = users[randomIndex].email;
+      publication.userId = userIdByEmail[randomEmail];
+      // Комменты у меня не могут хранить ID пользователя, потому что я передаю не массив а строку
       const publicationModel = await Publication.create(publication, {include: [Alias.COMMENTS]});
       await publicationModel.addCategories(publication.category);
     });
