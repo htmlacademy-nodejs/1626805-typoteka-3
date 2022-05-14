@@ -45,6 +45,10 @@ const Env = {
   PRODUCTION: `production`
 };
 
+const Role = {
+  ADMIN: `admin`
+};
+
 module.exports = {
   DEFAULT_PORT,
   API_PREFIX,
@@ -57,5 +61,6 @@ module.exports = {
   Env,
   DEFAULT_COUNT_PUBLICATION,
   MAX_ANNOUNCE_COUNT,
-  PUBLICATIONS_PER_PAGE
+  PUBLICATIONS_PER_PAGE,
+  Role
 };
