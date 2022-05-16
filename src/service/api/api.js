@@ -7,7 +7,14 @@ const {initPublicationsApi} = require(`./publication/publication`);
 const {initCategoryApi} = require(`./category/category`);
 const {initSearchApi} = require(`./search/search`);
 const {initCommentApi} = require(`./comment/comment`);
-const {PublicationService, CategoryService, SearchService, CommentService} = require(`../data-service`);
+const {initUserApi} = require(`./user/user`);
+const {
+  PublicationService,
+  CategoryService,
+  SearchService,
+  CommentService,
+  UserService
+} = require(`../data-service`);
 
 const app = new Router();
 
@@ -19,6 +26,7 @@ defineModels(sequelize);
     initSearchApi(app, new SearchService(sequelize));
     initPublicationsApi(app, new PublicationService(sequelize));
     initCommentApi(app, new CommentService(sequelize));
+    initUserApi(app, new UserService(sequelize));
   } catch (error) {
     console.log(error);
   }

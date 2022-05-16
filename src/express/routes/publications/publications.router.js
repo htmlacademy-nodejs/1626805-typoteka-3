@@ -8,6 +8,7 @@ const publicationRouter = new Router();
 const api = require(`../../api`).getAPI();
 const storage = require(`../../disk-storage`);
 const {prepareErrors} = require(`../../../utils`);
+const {Role} = require(`../../../constants`);
 
 const upload = multer({storage});
 
@@ -19,7 +20,7 @@ publicationRouter.get(`/add`, async (_, res) => {
     validationMessages: [],
     publication: {},
     account: {
-      type: `admin`,
+      type: Role.ADMIN,
     },
   });
 });
@@ -96,7 +97,7 @@ publicationRouter.get(`/edit/:id`, async (req, res) => {
     categories,
     validationMessages: [],
     account: {
-      type: `admin`,
+      type: Role.ADMIN,
     }
   });
 });
@@ -117,16 +118,15 @@ publicationRouter.post(`/add`, upload.single(`avatar`), async (req, res) => {
     await api.createPublication(newPublication);
     res.redirect(`/my`);
   } catch (error) {
-    // eslint-disable-next-line no-shadow
-    const categories = await api.getCategories();
+    const categoryItems = await api.getCategories();
     const validationMessages = prepareErrors(error);
 
     res.render(`pages/publications/edit`, {
-      categories,
       validationMessages,
+      categories: categoryItems,
       publication: {},
       account: {
-        type: `admin`,
+        type: Role.ADMIN,
       },
     });
   }

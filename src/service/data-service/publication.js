@@ -6,13 +6,35 @@ class PublicationService {
   constructor(sequelize) {
     this._Publication = sequelize.models.Publication;
     this._Category = sequelize.models.Category;
+    this._User = sequelize.models.User;
   }
 
   async findAll(needComments) {
-    const include = [Alias.CATEGORIES];
+    const include = [
+      Alias.CATEGORIES,
+      {
+        model: this._User,
+        as: Alias.USERS,
+        attributes: {
+          exclude: [`passwordHash`]
+        }
+      }
+    ];
 
     if (needComments) {
-      include.push(Alias.COMMENTS);
+      include.push({
+        model: this._Comment,
+        as: Alias.COMMENTS,
+        include: [
+          {
+            model: this._User,
+            as: Alias.USERS,
+            attributes: {
+              exclude: [`passwordHash`]
+            }
+          }
+        ]
+      });
     }
 
     const publications = await this._Publication.findAll({
