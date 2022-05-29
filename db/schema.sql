@@ -1,68 +1,68 @@
--- create database tipoteka
---   with
---   owner = aamalyugin
---   encoding = 'UTF8'
---   template = template0
---   lc_collate = 'C'
---   lc_ctype = 'C'
---   connection limit = -1;
-
-CREATE TABLE categories
-(
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name varchar(100) UNIQUE NOT NULL
-);
-
-CREATE TABLE roles
-(
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name varchar(100) NOT NULL
-);
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS articles_categories;
 
 CREATE TABLE users
 (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  first_name varchar(255) NOT NULL,
-  last_name varchar(255) NOT NULL,
-  email varchar(255) UNIQUE NOT NULL,
-  avatar varchar(50),
-  password_hash varchar(255) NOT NULL,
-  role_id integer NOT NULL,
-  FOREIGN KEY (role_id) REFERENCES roles(id)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email VARCHAR(50) NOT NULL,
+  password VARCHAR(50) NOT NULL,
+  picture VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE categories
+(
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE articles
+(
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(100) NOT NULL,
+  created_date DATE NOT NULL,
+  announce VARCHAR(500) NOT NULL,
+  full_text VARCHAR(1500) NOT NULL,
+  image VARCHAR(50) NOT NULL,
+
+  user_id INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
 
 CREATE TABLE comments
 (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  text text NOT NULL,
-  user_id integer NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL
+  id SERIAL PRIMARY KEY,
+  created_date DATE NOT NULL,
+  text VARCHAR(1500) NOT NULL,
+
+  user_id INTEGER NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+
+  article_id INTEGER NOT NULL,
+  FOREIGN KEY (article_id) REFERENCES articles (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
 );
 
-CREATE TABLE publications
+CREATE TABLE articles_categories
 (
-  id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  title varchar(255) NOT NULL,
-  announcement varchar(255) NOT NULL,
-  text text NOT NULL,
-  created_at timestamp DEFAULT current_timestamp,
-  picture varchar(50) NOT NULL,
-  user_id integer NOT NULL,
-  category_id integer NOT NULL,
-  comment_id integer NOT NULL,
-  FOREIGN KEY (user_id) REFERENCES users(id)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL,
-  FOREIGN KEY (category_id) REFERENCES categories(id)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL,
-  FOREIGN KEY (comment_id) REFERENCES comments(id)
-    ON DELETE SET NULL
-    ON UPDATE SET NULL
-);
+  article_id INTEGER NOT NULL,
+  FOREIGN KEY (article_id) REFERENCES articles (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
 
-CREATE INDEX ON publications(title);
+  category_id INTEGER NOT NULL,
+  FOREIGN KEY (category_id) REFERENCES categories (id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+
+  CONSTRAINT articles_categories_pk PRIMARY KEY (article_id, category_id)
+);
