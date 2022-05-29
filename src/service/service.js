@@ -1,18 +1,15 @@
 'use strict';
 
-const {Cli} = require(`./cli`);
-const {
-  DEFAULT_COMMAND,
-  USER_ARGV_INDEX,
-  EXIT_CODE
-} = require(`../constants`);
+const {CliCommandName} = require(`../common/enums`);
+const {USER_ARGV_IDX, COMMAND_ARGS_IDX} = require(`../common/constants`);
+const {Cli} = require(`./cli/cli`);
 
-const userArguments = process.argv.slice(USER_ARGV_INDEX);
+const userArguments = process.argv.slice(USER_ARGV_IDX);
 const [userCommand] = userArguments;
+const commandArguments = userArguments.slice(COMMAND_ARGS_IDX);
 
-if (userArguments.length === 0 || !Cli[userCommand]) {
-  Cli[DEFAULT_COMMAND].run();
-  process.exit(EXIT_CODE.success);
+if (!userArguments.length || !Cli[userCommand]) {
+  Cli[CliCommandName.HELP].run(commandArguments);
+} else {
+  Cli[userCommand].run(commandArguments);
 }
-
-Cli[userCommand].run(userArguments.slice(1));

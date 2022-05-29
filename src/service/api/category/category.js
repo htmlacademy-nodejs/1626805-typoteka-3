@@ -1,20 +1,20 @@
 'use strict';
+
 const {Router} = require(`express`);
-const {HTTP_STATUS_CODE} = require(`../../../constants`);
+const {ApiPath, CategoryApiPath, HttpCode} = require(`../../../common/enums`);
 
-const initCategoryApi = (app, service) => {
-  const categoryRoute = new Router();
+const initCategoryApi = (app, {categoryService}) => {
+  const categoryRouter = new Router();
 
-  app.use(`/categories`, categoryRoute);
+  app.use(ApiPath.CATEGORIES, categoryRouter);
 
-  // GET /api/categories — возвращает список категорий;
-  categoryRoute.get(`/`, async (_, res) => {
-    const categories = await service.findAll();
+  categoryRouter.get(CategoryApiPath.ROOT, async (_req, res) => {
+    const categories = await categoryService.findAll();
 
-    return res.status(HTTP_STATUS_CODE.OK).json([...categories]);
+    return res.status(HttpCode.OK).json(categories);
   });
 };
 
 module.exports = {
-  initCategoryApi
+  initCategoryApi,
 };
