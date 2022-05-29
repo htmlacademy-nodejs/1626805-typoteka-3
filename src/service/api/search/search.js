@@ -1,33 +1,26 @@
 'use strict';
 
 const {Router} = require(`express`);
-const {HTTP_STATUS_CODE} = require(`../../../constants`);
+const {ApiPath, HttpCode, SearchApiPath} = require(`../../../common/enums`);
 
-const initSearchApi = (app, service) => {
+const initSearchApi = (app, {searchService}) => {
   const searchRouter = new Router();
 
-  app.use(`/search`, searchRouter);
+  app.use(ApiPath.SEARCH, searchRouter);
 
-  // GET /api/search?query= — возвращает результаты поиска.
-  // Поиск публикаций выполняется по заголовку.
-  // Публикация соответствует поиску в случае наличия хотя бы одного вхождения искомой фразы.
-  searchRouter.get(`/`, async (req, res) => {
-    const {query} = req.query;
+  searchRouter.get(SearchApiPath.ROOT, async (req, res) => {
+    const {query = ``} = req.query;
 
-    if (query === undefined) {
-      res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(`Bag request`);
+    if (!query) {
+      return res.status(HttpCode.OK).json([]);
     }
 
-    const publications = await service.findAll(query);
+    const articles = await searchService.findAll(query);
 
-    if (publications.length) {
-      res.status(HTTP_STATUS_CODE.OK).json(publications);
-    } else {
-      res.status(HTTP_STATUS_CODE.NOT_FOUND).json(`Not found`);
-    }
+    return res.status(HttpCode.OK).json(articles);
   });
 };
 
 module.exports = {
-  initSearchApi
+  initSearchApi,
 };
