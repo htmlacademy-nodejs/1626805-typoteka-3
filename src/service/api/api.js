@@ -1,35 +1,44 @@
 'use strict';
 
 const {Router} = require(`express`);
-const sequelize = require(`../lib/sequelize`);
-const defineModels = require(`../models`);
-const {initPublicationsApi} = require(`./publication/publication`);
-const {initCategoryApi} = require(`./category/category`);
+const sequelize = require(`../../db/db`);
+const {defineModels} = require(`../../db/define-models`);
+const {Search, Category, Articles, Comments, Users} = require(`../../service/data`);
 const {initSearchApi} = require(`./search/search`);
-const {initCommentApi} = require(`./comment/comment`);
-const {initUserApi} = require(`./user/user`);
-const {
-  PublicationService,
-  CategoryService,
-  SearchService,
-  CommentService,
-  UserService
-} = require(`../data-service`);
-
-const app = new Router();
+const {initCategoryApi} = require(`./category/category`);
+const {initArticlesApi} = require(`./articles/articles`);
+const {initUsersApi} = require(`./users/users`);
 
 defineModels(sequelize);
 
-(async () => {
-  try {
-    initCategoryApi(app, new CategoryService(sequelize));
-    initSearchApi(app, new SearchService(sequelize));
-    initPublicationsApi(app, new PublicationService(sequelize));
-    initCommentApi(app, new CommentService(sequelize));
-    initUserApi(app, new UserService(sequelize));
-  } catch (error) {
-    console.log(error);
-  }
-})();
+const apiRouter = new Router();
+const {models} = sequelize;
 
-module.exports = app;
+initUsersApi(apiRouter, {
+  usersService: new Users({
+    userModel: models.User,
+  }),
+});
+
+initSearchApi(apiRouter, {
+  searchService: new Search({
+    articleModel: models.Article,
+  }),
+});
+
+initCategoryApi(apiRouter, {
+  categoryService: new Category({
+    categoryModel: models.Category,
+  }),
+});
+
+initArticlesApi(apiRouter, {
+  articlesService: new Articles({
+    articleModel: models.Article,
+  }),
+  commentsService: new Comments({
+    commentModel: models.Comment,
+  }),
+});
+
+module.exports = apiRouter;

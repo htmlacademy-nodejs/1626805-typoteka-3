@@ -1,0 +1,33 @@
+'use strict';
+
+// api
+const API_PREFIX = `/api`;
+
+// array
+const INCREASE_COUNT_FOR_IDX = 1;
+const INITIAL_ARRAY_IDX = 0;
+
+// article
+const ARTICLES_PER_PAGE = 8;
+const ARTICLES_SKIP_PAGE_COUNT = 1;
+
+// cli
+const USER_ARGV_IDX = 2;
+const COMMAND_ARGS_IDX = 1;
+
+const MOCKS_FILE_PATH = `mocks.json`;
+
+const USER_PASSWORD_SALT_ROUNDS = 10;
+
+
+module.exports = {
+  USER_ARGV_IDX,
+  COMMAND_ARGS_IDX,
+  MOCKS_FILE_PATH,
+  API_PREFIX,
+  INITIAL_ARRAY_IDX,
+  INCREASE_COUNT_FOR_IDX,
+  ARTICLES_PER_PAGE,
+  ARTICLES_SKIP_PAGE_COUNT,
+  USER_PASSWORD_SALT_ROUNDS,
+};
