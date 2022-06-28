@@ -1,0 +1,11 @@
+DROP DATABASE IF EXISTS typoteka;
+
+CREATE DATABASE typoteka
+  WITH
+  OWNER = aamalyugin
+  ENCODING = 'UTF8'
+  LC_COLLATE = 'C'
+  LC_CTYPE = 'C'
+  TEMPLATE = template0
+  CONNECTION LIMIT = -1
+
