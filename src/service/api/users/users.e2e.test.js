@@ -3,7 +3,7 @@
 const express = require(`express`);
 const {Sequelize} = require(`sequelize`);
 const request = require(`supertest`);
-const {Users} = require(`../../../service/data`);
+const {Users} = require(`../../data`);
 const {initDb} = require(`../../../db/init-db`);
 const {
   ApiPath,
@@ -25,6 +25,9 @@ const createAPI = async () => {
   await initDb(mockedDB, {
     categories: [],
     articles: [],
+    users: [],
+    comments: [],
+    articlesCategories: [],
   });
 
   initUsersApi(app, {

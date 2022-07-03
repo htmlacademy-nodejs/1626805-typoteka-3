@@ -1,6 +1,19 @@
 'use strict';
 
-const {ArticleKey} = require(`../../../common/enums`);
+const {ArticleKey, CommentKey} = require(`../../../common/enums`);
+const {fieldToErrorMessages} = require(`./common`);
+
+const getMessageByField = (messages) => {
+  return Object.keys(fieldToErrorMessages).reduce((acc, key) => {
+    const currentMessages = fieldToErrorMessages[key].filter((message) => {
+      return messages.includes(message);
+    });
+
+    acc[key] = currentMessages;
+
+    return acc;
+  }, {});
+};
 
 const getParsedCategories = (categories) => {
   if (!categories) {
@@ -18,10 +31,17 @@ const getArticleData = (body, file) => ({
   [ArticleKey.ANNOUNCE]: body.announce,
   [ArticleKey.CREATED_DATE]: new Date(body.createdDate).toISOString(),
   [ArticleKey.FULL_TEXT]: body.fullText || null,
-  [ArticleKey.CATEGORIES]: getParsedCategories(body.category),
+  [ArticleKey.CATEGORIES]: getParsedCategories(body.category)
+});
+
+const getCommentsData = (body) => ({
+  [CommentKey.TEXT]: body.text,
+  [CommentKey.USER_ID]: Number(body.userId)
 });
 
 module.exports = {
+  getMessageByField,
   getParsedCategories,
   getArticleData,
+  getCommentsData
 };

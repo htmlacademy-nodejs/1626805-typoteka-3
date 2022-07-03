@@ -8,9 +8,15 @@ const ArticleKey = {
   ANNOUNCE: `announce`,
   FULL_TEXT: `fullText`,
   CATEGORIES: `categories`,
-  COMMENTS: `comments`,
+  COMMENTS: `comments`
+};
+
+const ArticleCategoryKey = {
+  ARTICLE_ID: `articleId`,
+  CATEGORY_ID: `categoryId`
 };
 
 module.exports = {
   ArticleKey,
+  ArticleCategoryKey
 };

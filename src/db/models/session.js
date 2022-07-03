@@ -5,30 +5,26 @@ const {
   TableName,
   ModelName,
   SessionKey,
-  SessionValidationRule,
+  SessionValidationRule
 } = require(`../../common/enums`);
 
-const define = (sequelize) => {
+module.exports = (sequelize) => {
   return sequelize.define(
       ModelName.SESSION,
       {
         [SessionKey.SID]: {
           type: DataTypes.STRING,
-          primaryKey: true,
+          primaryKey: true
         },
         [SessionKey.EXPIRES]: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATE
         },
         [SessionKey.DATA]: {
-          type: new DataTypes.STRING(SessionValidationRule.DATA_LENGTH),
+          type: new DataTypes.STRING(SessionValidationRule.DATA_LENGTH)
         },
       },
       {
-        tableName: TableName.SESSIONS,
+        tableName: TableName.SESSIONS
       }
   );
-};
-
-module.exports = {
-  define,
 };

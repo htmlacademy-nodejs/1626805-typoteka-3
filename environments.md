@@ -5,3 +5,5 @@ DB_PORT - порт для подключения к БД
 DB_NAME - название базы данных
 DB_USER - имя пользователя
 DB_PASSWORD - пароль
+DB_DIALECT - sql диалект
+SECRET - cрока для middleware express-session

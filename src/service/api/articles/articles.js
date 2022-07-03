@@ -6,16 +6,20 @@ const {
   HttpCode,
   ArticlesApiPath,
   RequestParam,
+  RequestQuery
 } = require(`../../../common/enums`);
 const {
   existArticle,
   validateSchema,
   validateParamSchema,
+  validateQuerySchema
 } = require(`../../../middlewares`);
 const {
   article: articleSchema,
   comment: commentSchema,
   routeId: routeIdSchema,
+  queryLimit: queryLimitSchema,
+  queryOrder: queryOrderSchema
 } = require(`../../../schemas`);
 
 const initArticlesApi = (app, {articlesService, commentsService}) => {
@@ -23,19 +27,78 @@ const initArticlesApi = (app, {articlesService, commentsService}) => {
 
   app.use(ApiPath.ARTICLES, articlesRouter);
 
-  articlesRouter.get(ArticlesApiPath.ROOT, async (req, res) => {
-    const {offset, limit} = req.query;
-    const isUsePagination = Boolean(offset || limit);
+  articlesRouter.get(
+      ArticlesApiPath.ROOT,
+      [
+        validateQuerySchema(queryLimitSchema, RequestQuery.OFFSET),
+        validateQuerySchema(queryLimitSchema, RequestQuery.LIMIT),
+      ],
+      async (req, res) => {
+        const {offset, limit} = req.query;
+        const hasPagination = Boolean(offset || limit);
 
-    const articles = isUsePagination
-      ? await articlesService.findPage({
-        offset: Number(offset),
-        limit: Number(limit),
-      })
-      : await articlesService.findAll();
+        const articles = hasPagination
+          ? await articlesService.findPage({
+            offset: Number(offset),
+            limit: Number(limit),
+          })
+          : await articlesService.findAll();
 
-    return res.status(HttpCode.OK).json(articles);
-  });
+        return res.status(HttpCode.OK).json(articles);
+      }
+  );
+
+  articlesRouter.get(
+      ArticlesApiPath.POPULAR,
+      [validateQuerySchema(queryLimitSchema, RequestQuery.LIMIT)],
+      async (req, res) => {
+        const {limit} = req.query;
+        const articles = await articlesService.findMostCommented(limit);
+
+        return res.status(HttpCode.OK).json(articles);
+      }
+  );
+
+  articlesRouter.get(
+      ArticlesApiPath.CATEGORIES_$ID,
+      [
+        validateParamSchema(routeIdSchema, RequestParam.ID),
+        validateQuerySchema(queryLimitSchema, RequestQuery.OFFSET),
+        validateQuerySchema(queryLimitSchema, RequestQuery.LIMIT),
+      ],
+      async (req, res) => {
+        const {params, query} = req;
+        const {id} = params;
+        const {offset, limit} = query;
+        const hasPagination = Boolean(offset || limit);
+
+        const articles = hasPagination
+          ? await articlesService.findPageByCategoryId({
+            id,
+            offset,
+            limit,
+          })
+          : await articlesService.findByCategoryId(id);
+
+        return res.status(HttpCode.OK).json(articles);
+      }
+  );
+
+  articlesRouter.get(
+      ArticlesApiPath.COMMENTS,
+      [
+        validateQuerySchema(queryLimitSchema, RequestQuery.LIMIT),
+        validateQuerySchema(queryOrderSchema, RequestQuery.ORDER),
+      ],
+      async (req, res) => {
+        const {limit, order, hasArticle} = req.query;
+        const comments = hasArticle
+          ? await commentsService.findAllWithArticle(limit, order)
+          : await commentsService.findAll(limit, order);
+
+        return res.status(HttpCode.OK).json(comments);
+      }
+  );
 
   articlesRouter.post(
       ArticlesApiPath.ROOT,
@@ -113,7 +176,7 @@ const initArticlesApi = (app, {articlesService, commentsService}) => {
       ],
       async (req, res) => {
         const {articleId} = req.params;
-        const comments = await commentsService.findAll(Number(articleId));
+        const comments = await commentsService.findAllByArticleId(Number(articleId));
 
         return res.status(HttpCode.OK).json(comments);
       }

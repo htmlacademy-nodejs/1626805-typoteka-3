@@ -1,16 +1,49 @@
 extends layout
 
 block content
+  - const PAGINATION_PATH = '?';
+  - const ARTICLE_ANNOUNCE_LENGTH = 100;
+  - const MAX_COMMENT_LENGTH = 100;
+  - const hasArticles = Boolean(articles.length);
+  - const hasHotArticles = Boolean(hotArticles.length);
+  - const hasLastComments = Boolean(lastComments.length);
+  - const hasAutoHeight = !hasLastComments || !hasHotArticles;
   main.main-page
-    h1.visually-hidden= hiddenTitle
-    p= description
-    if Boolean(previews.length)
-      section.main-page__theme-list
-        h2.visually-hidden Список тем
-        +categoriesList(categories)
-      include ../common/section-flex/section-flex
-      include ../common/article-preview-list
-      +pagination(page, totalPages, 2, `?`)
+    h1.visually-hidden Главная страница личного блога Типотека
+    p Дороу 👏
+    +categoriesList(categories)
+    if hasArticles
+      div.main-page__section-flex(class=`${hasAutoHeight ? 'main-page__section-flex--short' : ''}`)
+        section.main-page__hot.hot
+          h2.hot__name
+            | Самое обсуждаемое
+            |
+            span.hot__icon.hot__icon--fire
+          if hasHotArticles
+            ul.hot__list
+              each hotArticle of hotArticles
+                li.hot__list-item
+                  a.hot__list-link(href=`/articles/${hotArticle.id}`)
+                    +cutString(hotArticle.announce, ARTICLE_ANNOUNCE_LENGTH)
+                    sup.hot__link-sup #{hotArticle.count}
+          else
+            p.hot__empty Здесь пока ничего нет...
+        section.main-page__last.last
+          h2.last__name
+            | Последние комментарии
+            |
+            span.last__icon.last__icon--cloud
+          if hasLastComments
+            ul.last__list
+              each lastComment of lastComments
+                li.last__list-item
+                  img.last__list-image(src=`img/${lastComment.user.avatar}` width='20' height='20' alt='Аватар пользователя')
+                  b.last__list-name #{lastComment.user.firstName} #{lastComment.user.lastName}
+                  a.last__list-link(href=`articles/${lastComment.articleId}`)
+                    +cutString(lastComment.text, MAX_COMMENT_LENGTH)
+          else
+            p.hot__empty Здесь пока ничего нет...
+      +articlesList(articles, currentPage, totalPagesCount, PAGINATION_PATH)
     else
       div.main-page__empty-wrapper
         p.main-page__empty-text Здесь пока пусто!

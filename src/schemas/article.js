@@ -4,8 +4,8 @@ const Joi = require(`joi`);
 const {
   ArticleKey,
   ArticleValidationRule,
-  ArticleValidationMessage,
-} = require(`../../common/enums`);
+  ArticleValidationMessage
+} = require(`../common/enums`);
 
 const article = Joi.object({
   [ArticleKey.TITLE]: Joi.string()
@@ -15,11 +15,11 @@ const article = Joi.object({
     .messages({
       'string.min': ArticleValidationMessage.TITLE_MIN_LENGTH,
       'string.max': ArticleValidationMessage.TITLE_MAX_LENGTH,
-      'any.required': ArticleValidationMessage.TITLE_REQUIRE,
+      'any.required': ArticleValidationMessage.TITLE_REQUIRE
     }),
   [ArticleKey.IMAGE]: Joi.string().allow(null).required(),
   [ArticleKey.CREATED_DATE]: Joi.string().isoDate().required().messages({
-    'any.required': ArticleValidationMessage.CREATED_DATE_REQUIRE,
+    'any.required': ArticleValidationMessage.CREATED_DATE_REQUIRE
   }),
   [ArticleKey.CATEGORIES]: Joi.array()
     .items(Joi.number())
@@ -27,7 +27,7 @@ const article = Joi.object({
     .required()
     .messages({
       'array.min': ArticleValidationMessage.CATEGORIES_MIN_COUNT,
-      'any.require': ArticleValidationMessage.CATEGORIES_REQUIRE,
+      'any.require': ArticleValidationMessage.CATEGORIES_REQUIRE
     }),
   [ArticleKey.ANNOUNCE]: Joi.string()
     .min(ArticleValidationRule.ANNOUNCE_MIN_LENGTH)
@@ -36,16 +36,16 @@ const article = Joi.object({
     .messages({
       'string.min': ArticleValidationMessage.ANNOUNCE_MIN_LENGTH,
       'string.max': ArticleValidationMessage.ANNOUNCE_MAX_LENGTH,
-      'any.require': ArticleValidationMessage.ANNOUNCE_REQUIRE,
+      'any.require': ArticleValidationMessage.ANNOUNCE_REQUIRE
     }),
   [ArticleKey.FULL_TEXT]: Joi.string()
     .max(ArticleValidationRule.FULL_TEXT_MAX_LENGTH)
     .allow(null)
     .messages({
-      'string.max': ArticleValidationMessage.FULL_TEXT_MAX_LENGTH,
+      'string.max': ArticleValidationMessage.FULL_TEXT_MAX_LENGTH
     }),
 });
 
 module.exports = {
-  article,
+  article
 };

@@ -3,7 +3,7 @@
 const {DataTypes} = require(`sequelize`);
 const {ModelName, TableName, CommentKey} = require(`../../common/enums`);
 
-const define = (sequelize) => {
+module.exports = (sequelize) => {
   return sequelize.define(
       ModelName.COMMENT,
       {
@@ -11,19 +11,16 @@ const define = (sequelize) => {
           type: DataTypes.INTEGER,
           autoIncrement: true,
           primaryKey: true,
-          allowNull: false,
+          allowNull: false
         },
         [CommentKey.TEXT]: {
           type: DataTypes.STRING,
-          allowNull: false,
+          allowNull: false
         },
       },
       {
-        tableName: TableName.COMMENTS,
+        tableName: TableName.COMMENTS
       }
   );
 };
 
-module.exports = {
-  define,
-};

@@ -5,12 +5,12 @@ const CliCommandName = {
   HELP: `--help`,
   SERVER: `--server`,
   FILL: `--fill`,
-  FILLDB: `--filldb`,
+  FILLDB: `--filldb`
 };
 
 const CliExitCode = {
   ERROR: 1,
-  SUCCESS: 0,
+  SUCCESS: 0
 };
 
 module.exports = {

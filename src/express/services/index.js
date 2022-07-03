@@ -5,5 +5,5 @@ const DiskStorage = require(`./disk-storage`);
 
 module.exports = {
   Api,
-  DiskStorage,
+  DiskStorage
 };
