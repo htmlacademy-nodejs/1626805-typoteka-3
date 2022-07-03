@@ -3,11 +3,11 @@
 const express = require(`express`);
 const {Sequelize} = require(`sequelize`);
 const request = require(`supertest`);
-const {Search} = require(`../../../service/data`);
+const {Search} = require(`../../data`);
 const {initDb} = require(`../../../db/init-db`);
 const {ApiPath, HttpCode} = require(`../../../common/enums`);
 const {initSearchApi} = require(`./search`);
-const {mockedArticles, mockedCategories} = require(`./search.mocks`);
+const {mockedArticles} = require(`./search.mocks`);
 
 const createAPI = async () => {
   const app = express();
@@ -18,13 +18,17 @@ const createAPI = async () => {
   app.use(express.json());
 
   await initDb(mockedDB, {
-    categories: mockedCategories,
+    categories: [],
     articles: mockedArticles,
+    users: [],
+    comments: [],
+    articlesCategories: [],
   });
 
   initSearchApi(app, {
     searchService: new Search({
       articleModel: mockedDB.models.Article,
+      categoryModel: mockedDB.models.Category,
     }),
   });
 

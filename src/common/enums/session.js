@@ -2,7 +2,7 @@
 
 const SessionExpiration = {
   PERIOD: 180000,
-  CHECK: 60000,
+  CHECK: 60000
 };
 
 const SessionKey = {
@@ -10,7 +10,7 @@ const SessionKey = {
   EXPIRES: `expires`,
   DATA: `data`,
   CREATED_AT: `createdAt`,
-  UPDATED_AT: `updatedAt`,
+  UPDATED_AT: `updatedAt`
 };
 
 module.exports = {

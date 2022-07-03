@@ -4,7 +4,7 @@ html(lang='ru')
     meta(charset='utf-8')
     meta(name='viewport' content='width=device-width,initial-scale=1')
     meta(name='Description' content='Личный блог Типотека')
-    title= title
+    title Типотека
     base(href='/')
     link(rel='preload' href='./fonts/Inter-Regular.woff2' as='font' crossorigin='anonymous')
     link(rel='preload' href='./fonts/Inter-Medium.woff2' as='font' crossorigin='anonymous')
@@ -26,7 +26,8 @@ html(lang='ru')
   body
     include ../mixins/mixins.pug
 
-    .wrapper
+    - const isErrorPage = Boolean(errorCode);
+    div(class=`${isErrorPage ? 'wrapper-color' : 'wrapper'}`)
       include ../common/header
       block content
       include ../common/footer

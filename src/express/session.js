@@ -11,7 +11,7 @@ const appSessionStore = new SequelizeStoreInstance({
   db: sequelize,
   expiration: SessionExpiration.PERIOD,
   checkExpirationInterval: SessionExpiration.CHECK,
-  tableName: TableName.SESSIONS,
+  tableName: TableName.SESSIONS
 });
 
 const sessionMiddleware = session({
@@ -21,8 +21,11 @@ const sessionMiddleware = session({
   proxy: true,
   saveUninitialized: false,
   name: `session_id`,
+  cookie: {
+    sameSite: `strict`
+  }
 });
 
 module.exports = {
-  sessionMiddleware,
+  sessionMiddleware
 };

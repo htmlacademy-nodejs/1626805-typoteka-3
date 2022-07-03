@@ -17,11 +17,17 @@ const {
   generateMockedComments,
   generatePublication,
   generatePublications,
-  getMockedPublicationsData,
-  readPublicationsFileContent,
+  generateMockedUser,
+  generateMockedUsers,
+  generateMockedArticlesCategories,
+  generateMockedCategories,
+  getMockedData,
+  generateMocks,
+  readPublicationsFileContent
 } = require(`./mocks`);
 const {getHttpErrors} = require(`./exceptions`);
 const {asyncHandler} = require(`./routes`);
+const {calculatePagination, getTotalPagesCount} = require(`./pagination`);
 
 module.exports = {
   logger,
@@ -41,8 +47,15 @@ module.exports = {
   generateMockedComments,
   generatePublication,
   generatePublications,
-  getMockedPublicationsData,
+  generateMockedUser,
+  generateMockedUsers,
+  generateMockedArticlesCategories,
+  generateMockedCategories,
+  getMockedData,
+  generateMocks,
   readPublicationsFileContent,
   getHttpErrors,
   asyncHandler,
+  calculatePagination,
+  getTotalPagesCount
 };

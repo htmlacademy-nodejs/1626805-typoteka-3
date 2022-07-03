@@ -4,9 +4,9 @@ const MessageColor = {
   BLUE: `blue`,
   GRAY: `gray`,
   GREEN: `green`,
-  RED: `red`,
+  RED: `red`
 };
 
 module.exports = {
-  MessageColor,
+  MessageColor
 };
