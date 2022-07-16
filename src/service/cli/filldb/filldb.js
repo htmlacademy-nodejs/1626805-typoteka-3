@@ -2,17 +2,12 @@
 
 const sequelize = require(`../../../db/db`);
 const {initDb} = require(`../../../db/init-db`);
-const {
-  paintMessage,
-  generatePublications,
-  getMockedPublicationsData,
-  logger
-} = require(`../../../helpers`);
+const {paintMessage, generateMocks, logger} = require(`../../../helpers`);
 const {
   CliCommandName,
   CliExitCode,
   MessageColor,
-  MocksConfig,
+  MocksConfig
 } = require(`../../../common/enums`);
 
 module.exports = {
@@ -42,23 +37,10 @@ module.exports = {
       process.exit(CliExitCode.ERROR);
     }
 
-    const {
-      titles,
-      descriptions,
-      categories,
-      comments,
-    } = await getMockedPublicationsData();
-    const mockedPublications = generatePublications({
-      count: publicationsCount,
-      titles,
-      descriptions,
-      categories,
-      comments,
+    const mocks = await generateMocks({
+      articlesCount: publicationsCount
     });
 
-    initDb(sequelize, {
-      articles: mockedPublications,
-      categories,
-    });
+    initDb(sequelize, mocks);
   },
 };

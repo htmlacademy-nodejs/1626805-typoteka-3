@@ -7,5 +7,5 @@ const writeToFile = async (path, content) => await fs.writeFile(path, content);
 
 module.exports = {
   writeToFile,
-  readFile,
+  readFile
 };

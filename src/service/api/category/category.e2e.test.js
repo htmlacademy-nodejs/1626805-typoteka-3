@@ -3,28 +3,32 @@
 const express = require(`express`);
 const {Sequelize} = require(`sequelize`);
 const request = require(`supertest`);
-const {Category} = require(`../../../service/data`);
+const {Category} = require(`../../data`);
 const {initDb} = require(`../../../db/init-db`);
 const {ApiPath, HttpCode} = require(`../../../common/enums`);
 const {initCategoryApi} = require(`./category`);
-const {mockedArticles, mockedCategories} = require(`./category.mocks`);
+const {mockedCategories} = require(`./category.mocks`);
 
 const createAPI = async () => {
   const app = express();
   const mockedDB = new Sequelize(`sqlite::memory:`, {
-    logging: false,
+    logging: false
   });
 
   app.use(express.json());
 
   await initDb(mockedDB, {
     categories: mockedCategories,
-    articles: mockedArticles,
+    articles: [],
+    users: [],
+    comments: [],
+    articlesCategories: []
   });
 
   initCategoryApi(app, {
     categoryService: new Category({
       categoryModel: mockedDB.models.Category,
+      articleCategoryModel: mockedDB.models.ArticleCategory
     }),
   });
 
@@ -52,7 +56,7 @@ describe(`API returns category list`, () => {
     expect(response.body.map((it) => it.name)).toEqual([
       `Разное`,
       `Без рамки`,
-      `IT`,
+      `IT`
     ]);
   });
 });

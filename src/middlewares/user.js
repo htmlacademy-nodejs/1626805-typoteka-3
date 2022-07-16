@@ -8,7 +8,7 @@ const checkAlreadyRegister = (service) => async (req, res, next) => {
 
   if (hasUser) {
     return res.status(HttpCode.BAD_REQUEST).send({
-      messages: [CreatedUserValidationMessage.EMAIL_ALREADY_REGISTER],
+      messages: [CreatedUserValidationMessage.EMAIL_ALREADY_REGISTER]
     });
   }
 
@@ -26,8 +26,19 @@ const checkUserAuthenticate = (req, res, next) => {
   return next();
 };
 
+const checkIsAdmin = (req, res, next) => {
+  const {user} = req.session;
+  const isAdmin = Boolean(user && user.isAdmin);
+
+  if (!isAdmin) {
+    return res.redirect(SsrMainPath.ROOT);
+  }
+
+  return next();
+};
 
 module.exports = {
   checkAlreadyRegister,
   checkUserAuthenticate,
+  checkIsAdmin
 };

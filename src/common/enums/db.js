@@ -1,14 +1,12 @@
 'use strict';
 
-const {Op} = require(`sequelize`);
-
-const DbOperator = Op;
-
 const ModelAlias = {
+  USER: `user`,
   CATEGORIES: `categories`,
   COMMENTS: `comments`,
   ARTICLES: `articles`,
-  ARTICLE_CATEGORIES: `articleCategories`,
+  ARTICLE: `article`,
+  ARTICLE_CATEGORIES: `articleCategories`
 };
 
 const ModelName = {
@@ -17,7 +15,7 @@ const ModelName = {
   ARTICLE: `Article`,
   ARTICLE_CATEGORY: `ArticleCategory`,
   USER: `User`,
-  SESSION: `Session`,
+  SESSION: `Session`
 };
 
 const TableName = {
@@ -26,12 +24,11 @@ const TableName = {
   USERS: `users`,
   ARTICLES: `articles`,
   ARTICLES_CATEGORIES: `articles_categories`,
-  SESSIONS: `sessions`,
+  SESSIONS: `sessions`
 };
 
 module.exports = {
   ModelAlias,
   ModelName,
-  TableName,
-  DbOperator,
+  TableName
 };

@@ -11,13 +11,14 @@ const {
   UsersApiPath,
   HttpMethod,
   RequestParam,
+  RequestQuery
 } = require(`./api`);
 const {SsrPath, SsrMainPath, SsrArticlePath, SsrMyPath} = require(`./ssr`);
-const {ArticleKey} = require(`./article`);
+const {ArticleKey, ArticleCategoryKey} = require(`./article`);
 const {CommentKey} = require(`./comment`);
 const {AppEnvironment, ENV, LogLevel, LoggerName} = require(`./app`);
 const {MocksConfig} = require(`./mocks`);
-const {ModelAlias, ModelName, TableName, DbOperator} = require(`./db`);
+const {ModelAlias, ModelName, TableName} = require(`./db`);
 const {
   CommentValidationMessage,
   CommentValidationRule,
@@ -27,15 +28,20 @@ const {
   CreatedUserValidationMessage,
   CreatedUserValidationRule,
   SessionValidationRule,
+  CategoryValidationRule,
+  QueryValidationMessage,
+  CategoryValidationMessage
 } = require(`./validation`);
 const {
   UserKey,
   CreatedUserPayloadKey,
   UserLoginValidationMessage,
-  UserLoginPayloadKey,
+  UserLoginPayloadKey
 } = require(`./user`);
 const {CategoryKey} = require(`./category`);
 const {SessionKey, SessionExpiration} = require(`./session`);
+const {AdminAction} = require(`./action`);
+const {SortType} = require(`./sort`);
 
 module.exports = {
   CliCommandName,
@@ -55,6 +61,7 @@ module.exports = {
   ArticlesApiPath,
   HttpMethod,
   RequestParam,
+  RequestQuery,
   AppEnvironment,
   ENV,
   LogLevel,
@@ -63,7 +70,6 @@ module.exports = {
   ModelAlias,
   ModelName,
   TableName,
-  DbOperator,
   CommentValidationMessage,
   CommentValidationRule,
   ArticleValidationMessage,
@@ -78,5 +84,11 @@ module.exports = {
   CategoryKey,
   CreatedUserPayloadKey,
   SessionKey,
+  ArticleCategoryKey,
   SessionExpiration,
+  CategoryValidationRule,
+  QueryValidationMessage,
+  CategoryValidationMessage,
+  AdminAction,
+  SortType
 };

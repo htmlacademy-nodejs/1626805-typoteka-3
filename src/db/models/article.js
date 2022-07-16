@@ -3,7 +3,7 @@
 const {DataTypes} = require(`sequelize`);
 const {ModelName, TableName, ArticleKey} = require(`../../common/enums`);
 
-const define = (sequelize) => {
+module.exports = (sequelize) => {
   return sequelize.define(
       ModelName.ARTICLE,
       {
@@ -11,33 +11,29 @@ const define = (sequelize) => {
           type: DataTypes.INTEGER,
           autoIncrement: true,
           primaryKey: true,
-          allowNull: false,
+          allowNull: false
         },
         [ArticleKey.TITLE]: {
           type: new DataTypes.STRING(250),
-          allowNull: false,
+          allowNull: false
         },
         [ArticleKey.ANNOUNCE]: {
           type: new DataTypes.STRING(250),
-          allowNull: false,
+          allowNull: false
         },
         [ArticleKey.CREATED_DATE]: {
           type: DataTypes.DATE,
-          allowNull: false,
+          allowNull: false
         },
         [ArticleKey.FULL_TEXT]: {
-          type: new DataTypes.STRING(1000),
+          type: new DataTypes.STRING(1000)
         },
         [ArticleKey.IMAGE]: {
-          type: new DataTypes.STRING(150),
-        },
+          type: new DataTypes.STRING(150)
+        }
       },
       {
-        tableName: TableName.ARTICLES,
+        tableName: TableName.ARTICLES
       }
   );
-};
-
-module.exports = {
-  define,
 };

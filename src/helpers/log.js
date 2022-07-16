@@ -22,5 +22,5 @@ const getLogger = (options = {}) => {
 
 module.exports = {
   logger,
-  getLogger,
+  getLogger
 };

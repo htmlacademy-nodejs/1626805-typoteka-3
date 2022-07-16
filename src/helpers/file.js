@@ -3,9 +3,7 @@
 const FILE_EXTENSION_SEPARATOR = `.`;
 
 const getFileExtension = (fileName) => {
-  const fileExtension = fileName.split(FILE_EXTENSION_SEPARATOR).pop();
-
-  return fileExtension;
+  return fileName.split(FILE_EXTENSION_SEPARATOR).pop();
 };
 
 module.exports = {

@@ -2,7 +2,7 @@
 
 const {Sequelize} = require(`sequelize`);
 const {ENV, AppEnvironment} = require(`../common/enums`);
-const {dbConfig} = require(`./sequelize-config`);
+const dbConfig = require(`./sequelize-config`);
 
 const config = dbConfig[ENV.NODE_ENV || AppEnvironment.DEVELOPMENT];
 
@@ -18,8 +18,8 @@ const sequelize = new Sequelize(
         max: 5,
         min: 0,
         acquire: 10000,
-        idle: 10000,
-      },
+        idle: 10000
+      }
     }
 );
 

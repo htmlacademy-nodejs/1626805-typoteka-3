@@ -14,7 +14,7 @@ block content
           form(action='/login' method='POST')
             div.form__field
               label
-                input(type='email' name='email' placeholder='Электронная почта' required)
+                input(value=loginPayload.email type='email' name='email' placeholder='Электронная почта' required)
             div.form__field
               label
                 input(type='password' name='password' placeholder='Пароль' required)

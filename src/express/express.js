@@ -16,33 +16,34 @@ app.use(express.urlencoded({extended: false}));
 app.use(sessionMiddleware);
 
 const uploadImgPath = path.resolve(__dirname, `./${AppConfig.UPLOAD_DIR}/img/`);
-const routerInits = [initMainRouter, initMyRouter, initArticlesRouter];
 const api = new Api({
   baseURL: AppConfig.API_URL,
   timeout: AppConfig.API_TIMEOUT,
 });
 const storage = new DiskStorage({
-  destination: uploadImgPath,
+  destination: uploadImgPath
 });
 const routerSettings = {
   api,
-  storage,
+  storage
 };
 
-routerInits.forEach((initRouter) => {
-  initRouter(app, routerSettings);
-});
+initMainRouter(app, routerSettings);
+initMyRouter(app, routerSettings);
+initArticlesRouter(app, routerSettings);
 
 app.use(express.static(path.resolve(__dirname, AppConfig.PUBLIC_DIR)));
 app.use(express.static(path.resolve(__dirname, AppConfig.UPLOAD_DIR)));
 
-app.use((_, res) =>
-  res.status(HttpCode.BAD_REQUEST).render(`pages/errors/404`)
-);
+app.use((_req, res) => {
+  return res.status(HttpCode.BAD_REQUEST).render(`pages/errors/404`, {
+    errorCode: HttpCode.NOT_FOUND
+  });
+});
 app.use((_err, _req, res, _next) => {
-  console.log(_err);
-
-  return res.status(HttpCode.INTERNAL_SERVER_ERROR).render(`pages/errors/500`);
+  return res.status(HttpCode.INTERNAL_SERVER_ERROR).render(`pages/errors/500`, {
+    errorCode: HttpCode.INTERNAL_SERVER_ERROR
+  });
 });
 
 app.set(`views`, path.resolve(__dirname, `templates`));

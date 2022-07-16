@@ -18,7 +18,7 @@ class DiskStorage {
 
   get upload() {
     return multer({
-      storage: this._storage,
+      storage: this._storage
     });
   }
 }
