@@ -18,7 +18,7 @@ CREATE TABLE users
   "updatedAt" TIMESTAMP DEFAULT current_timestamp
 );
 
-CREATE TABLE categories
+CREATE TABLE users
 (
   "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(40) NOT NULL,

@@ -1,13 +1,13 @@
 extends ../layout
 
 block content
-  - const paginationPath = `articles/category/${currentCategory.id}?`;
-  - const hasArticles = Boolean(articles.length);
   main.articles-category
-    h1 #{currentCategory.name}
-    +categoriesList(categories, currentCategory)
-    if hasArticles
-      +articlesList(articles, currentPage, totalPagesCount, paginationPath)
+    h1= displayedTitle
+    if hasContent
+      section.articles-category__theme-list
+        h2.visually-hidden Список тем
+        include ../../common/themes
+      include ../../common/section-flex/section-flex
+      include ../../common/article-preview-list
     else
-      div.main-page__empty-wrapper
-        p.main-page__empty-text Здесь пока пусто!
+      include ../../common/empty/empty-section

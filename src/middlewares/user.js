@@ -37,7 +37,6 @@ const checkIsAdmin = (req, res, next) => {
   return next();
 };
 
-
 module.exports = {
   checkAlreadyRegister,
   checkUserAuthenticate,

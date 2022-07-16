@@ -85,5 +85,5 @@ const initCategoryApi = (app, {categoryService}) => {
 };
 
 module.exports = {
-  initCategoryApi
+  initCategoryApi,
 };
